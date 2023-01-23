@@ -1,5 +1,5 @@
 {
-  "name": "TigerAnalyzer",
+  "name": "tiger-analyzer",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,6 +7,10 @@
     "tauri": "tauri"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1.2.2"
+    "@tauri-apps/cli": "^2.0.0-alpha.1",
+    "internal-ip": "^7.0.0"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.0.0-alpha.0"
   }
 }

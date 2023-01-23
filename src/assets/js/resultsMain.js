@@ -1,5 +1,8 @@
 var grids = document.querySelector(".grids").getElementsByClassName("grid-container");
 var navItems = document.querySelector(".navbar").getElementsByClassName("nav-item");
+const { invoke } = window.__TAURI__.tauri;
+const { emit, listen } = window.__TAURI__.event;
+const dialog = window.__TAURI__.dialog;
 
 
 
@@ -61,4 +64,8 @@ Array.from(grids).forEach(grid => {
         dot.addEventListener("click", navGridGroups)
     });
 });
+
+const dataGet = listen('data-loaded', (event) => {
+    console.log(event.payload);
+})
 
