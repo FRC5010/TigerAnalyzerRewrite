@@ -58,14 +58,11 @@ function navGridGroups(event) {
 }
 
 Array.from(grids).forEach(grid => {
-    let dots = grid.querySelector(".dot-nav").getElementsByClassName("dot");
+    let dots = grid.querySelector(".dot-nav")
+    if (!dots) return;
+    dots = dots.getElementsByClassName("dot"); 
 
     Array.from(dots).forEach(dot => {
         dot.addEventListener("click", navGridGroups)
     });
 });
-
-const dataGet = listen('data-loaded', (event) => {
-    console.log(event.payload);
-})
-

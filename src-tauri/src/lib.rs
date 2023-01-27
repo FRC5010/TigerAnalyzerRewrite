@@ -6,7 +6,6 @@ use tauri::App;
 extern crate csv;
 extern crate serde;
 
-
 mod data;
 
 #[cfg(mobile)]
@@ -15,6 +14,10 @@ mod mobile;
 pub use mobile::*;
 
 pub type SetupHook = Box<dyn FnOnce(&mut App) -> Result<(), Box<dyn std::error::Error>> + Send>;
+
+pub static TBA_AUTH_KEY: &str = "YpCes0r7kuXhw0S5fubKU27qoU4cAwDft0NBjhD3DdUKa9taHKhC3zGR0mqK76zA";
+
+
 
 fn show_window(handle: &tauri::AppHandle, window_label: &str) {
     handle.get_window(window_label).unwrap().show().expect("Couldn't find window");
@@ -48,9 +51,14 @@ fn read_scout_data(data_path: &str) -> Result<HashMap<u64, FrcTeam>, Box<dyn Err
 fn submit_data(handle: tauri::AppHandle, data_path: &str) {
     show_window(&handle, "results");
     close_window(&handle, "main");
+    let data: HashMap<u64, FrcTeam> = read_scout_data(data_path).unwrap();
+    handle.emit_to("results", "got_data", data).expect("Unable to Emit Data");
 
-    let mut data: HashMap<u64, FrcTeam> = read_scout_data(data_path).unwrap();
+}
+
+fn get_data(handle: &tauri::AppHandle) {
   
+  // Return data to Tauri Frontend
 }
 
 
