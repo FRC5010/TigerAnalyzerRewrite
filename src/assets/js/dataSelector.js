@@ -3,6 +3,7 @@ const dialog = window.__TAURI__.dialog;
 var filePath = null;
 
 async function populate_results(data) {
+  
   Promise.resolve();
 } 
 

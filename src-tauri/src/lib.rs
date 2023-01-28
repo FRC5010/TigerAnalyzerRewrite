@@ -1,3 +1,4 @@
+use std::hash::Hash;
 use std::{error::Error, collections::HashMap};
 use data::{FrcTeam, MatchEntry};
 use tauri::{Manager};
@@ -29,6 +30,7 @@ fn read_scout_data(data_path: &str) -> Result<HashMap<u64, FrcTeam>, Box<dyn Err
     }
     for team in team_list.values_mut() {
       team.generate_summary();
+      team.query_tba_data(TBA_AUTH_KEY);
     }
 
     Ok(team_list)

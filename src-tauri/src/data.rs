@@ -1,3 +1,6 @@
+use std::collections::HashMap;
+
+use reqwest::{header, Response, Error};
 use serde::{Serialize, Deserialize, de};
 
 
@@ -151,7 +154,7 @@ pub struct FrcTeam {
     team_number: u64,
     match_data: Vec<MatchEntry>,
     summary: Option<TeamSummary>,
-    tba_data: Option<String>
+    tba_data: Option<HashMap<String, serde_json::Value>>
 }
 
 impl FrcTeam {
@@ -167,13 +170,23 @@ impl FrcTeam {
         &self.summary
     }
 
-    pub fn query_tba_data(&self, auth_key: &str) {
-        println!("querying TBA data");
+    pub fn query_tba_data(&mut self, auth_key: &str) {
+        self.tba_data = Some(get_tba_data(auth_key, &("/team/frc".to_owned()+&self.team_number.to_string())).unwrap().json::<HashMap<String, serde_json::Value>>().unwrap());
     }
 
     pub fn add_match_entry(&mut self, entry: MatchEntry) {
         self.match_data.push(entry);
     }
+}
+
+
+fn get_tba_data(auth_key:&str, query:&str) -> Result<reqwest::blocking::Response, reqwest::Error> {
+    let request_url = "https://www.thebluealliance.com/api/v3".to_string()+query;
+    let client = reqwest::blocking::Client::new();
+    let response =  client.get(request_url)
+        .header("X-TBA-Auth-Key", auth_key)
+        .send();
+    response    
 }
 
 #[cfg(test)]
