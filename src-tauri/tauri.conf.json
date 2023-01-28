@@ -65,20 +65,9 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 500,
+        "height": 620,
         "resizable": false,
         "title": "TigerAnalyzer",
-        "acceptFirstMouse": true,
-        "width": 500
-      },
-      {
-        "fullscreen": false,
-        "height": 620,
-        "resizable": true,
-        "label": "results",
-        "visible": false,
-        "url": "resultPage.html",
-        "title": "Results",
         "acceptFirstMouse": true,
         "width": 800
       }

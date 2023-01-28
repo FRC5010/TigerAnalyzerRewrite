@@ -17,18 +17,6 @@ pub type SetupHook = Box<dyn FnOnce(&mut App) -> Result<(), Box<dyn std::error::
 
 pub static TBA_AUTH_KEY: &str = "YpCes0r7kuXhw0S5fubKU27qoU4cAwDft0NBjhD3DdUKa9taHKhC3zGR0mqK76zA";
 
-
-
-fn show_window(handle: &tauri::AppHandle, window_label: &str) {
-    handle.get_window(window_label).unwrap().show().expect("Couldn't find window");
-}
-
-
-fn close_window(handle: &tauri::AppHandle, window_label: &str) {
-    handle.get_window(window_label).unwrap().close().expect("Couldn't find window");
-}
-
-
 fn read_scout_data(data_path: &str) -> Result<HashMap<u64, FrcTeam>, Box<dyn Error>> {
     let mut team_list: HashMap<u64, FrcTeam> = HashMap::new();
     let mut csv_data = csv::Reader::from_path(data_path)?;
@@ -48,19 +36,11 @@ fn read_scout_data(data_path: &str) -> Result<HashMap<u64, FrcTeam>, Box<dyn Err
 
 
 #[tauri::command]
-fn submit_data(handle: tauri::AppHandle, data_path: &str) {
-    show_window(&handle, "results");
-    close_window(&handle, "main");
+fn submit_data(handle: tauri::AppHandle, data_path: &str) -> HashMap<u64, FrcTeam> {
     let data: HashMap<u64, FrcTeam> = read_scout_data(data_path).unwrap();
-    handle.emit_to("results", "got_data", data).expect("Unable to Emit Data");
+    return data;
 
 }
-
-fn get_data(handle: &tauri::AppHandle) {
-  
-  // Return data to Tauri Frontend
-}
-
 
 #[derive(Default)]
 pub struct AppBuilder {

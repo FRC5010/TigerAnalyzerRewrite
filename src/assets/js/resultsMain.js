@@ -66,3 +66,10 @@ Array.from(grids).forEach(grid => {
         dot.addEventListener("click", navGridGroups)
     });
 });
+
+
+function goToTop() {
+    window.scrollTo({'top':0, 'behavior':'smooth'})
+}
+
+document.querySelector(".up-arrow").addEventListener('click', goToTop);
