@@ -105,6 +105,7 @@ pub struct TeamSummary {
     avg_cube_low: f64,
     avg_cube_med: f64,
     avg_cube_high: f64,
+    // TODO: Add Balance %s
 }
 
 // UNSURE OF IMPLEMENTATION FOR AVERAGING
@@ -171,7 +172,10 @@ impl FrcTeam {
     }
 
     pub fn query_tba_data(&mut self, auth_key: &str) {
-        self.tba_data = Some(get_tba_data(auth_key, &("/team/frc".to_owned()+&self.team_number.to_string())).unwrap().json::<HashMap<String, serde_json::Value>>().unwrap());
+        self.tba_data = match get_tba_data(auth_key, &("/team/frc".to_owned()+&self.team_number.to_string())) {
+            Ok(data) => Some(data.json::<HashMap<String, serde_json::Value>>().unwrap()),
+            Err(err) => None
+        };
     }
 
     pub fn add_match_entry(&mut self, entry: MatchEntry) {

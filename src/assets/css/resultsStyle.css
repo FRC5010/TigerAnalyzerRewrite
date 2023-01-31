@@ -43,28 +43,123 @@ html {scroll-behavior: smooth;}
 
 }
 
-.data-raw-display {
-    width: 100%;
-    height: 100%;
+.tiger-scrollbar::-webkit-scrollbar {
+    width: 10px;
+}
+
+.tiger-scrollbar::-webkit-scrollbar-thumb {
+    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
+    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
+    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    border-radius: 25px;
+}
+
+.tiger-scrollbar::-webkit-scrollbar-track {
+    border-radius: 25px;
+
+    background-color: rgb(191, 191, 191);
+}
+
+.data-match-raw-display, .data-team-raw-display {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content:flex-start;
-    row-gap: 10px;
-    
+    row-gap: 2px;
+    overflow-y: scroll;
+    flex-shrink: 0;
 }
 
-.data-raw-display > .entry {
+.data-match-raw-display > .entry {
     width: 96%;
     height: 30px;
     border-radius: 15px;
-    background-color: #efeae9;
+    border: 2px black solid;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 20px;
     font-family: "Gilroy";
+}
+
+.data-match-raw-display > .label {
+    padding: 0px 20px 0px 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+    height: 50px;
+    border-radius: 0px 15px 15px 0px;
+    text-align: center;
+    font-family: "Gilroy";
+    box-sizing: border-box; 
+    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
+    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
+    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    border-left: 0px;
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+    align-items: center;
+    color: white;
+    align-self: flex-start;
+}
+
+.team-entry > .label {
+    font-size: 28px;
+    color: white;
+}
+
+.team-entry > .team-name {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.692);
+    margin-top: 0px;
+}
+
+.team-entry > .cone-table, .team-entry > .cube-table {
+    width: 90%;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.cone-table > caption, .cube-table > caption {
+    caption-side: top;
+    text-align: center;
+}
+
+.cone-table > caption > .caption-icon, .cube-table > caption > .caption-icon {
+    width: 30px;
+    height: 30px;
+    transform: translateX(0%);
+}
+
+.data-team-raw-display > .team-entry {
+    width: 50%;
+    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
+    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
+    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
+    font-family: "Gilroy";
+    padding: 10px 0px 50px 0px;
+}
+
+.team-entry > .station-table {
+    width: 90%;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.station-table > caption {
+    margin-bottom: 5px;
 }
 
 .grid-group.inactive {

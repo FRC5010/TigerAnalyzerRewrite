@@ -1,3 +1,12 @@
 date,match_type,team_number,tba_match_data,alliance,cone_low_count,cone_med_count,cone_high_count,cube_low_count,cube_med_count,cube_high_count,floor_pickup,auton_balance,end_game_balance
 12309532,qa,5010,,blue,3,4,2,4,7,3,TRUE,1,2
 12332532,qa,5010,,red,5,3,6,2,5,1,TRUE,0,2
+13402345,qa,604,,red,8,2,4,1,5,0,FALSE,2,2
+13412345,qa,1,,blue,10,9,0,6,8,0,TRUE,1,2
+14412345,qa,1,,red,8,6,1,7,7,0,TRUE,2,0
+12309332,qa,5010,,blue,3,4,2,4,7,3,TRUE,1,2
+12332732,qa,5010,,red,5,3,6,2,5,1,TRUE,0,2
+13432345,qa,604,,red,8,2,4,1,5,0,FALSE,2,2
+13416345,qa,1,,blue,9,5,1,7,9,1,TRUE,1,2
+14422345,qa,3,,red,8,6,1,7,7,0,TRUE,2,0
+

@@ -9,6 +9,10 @@
     <script src="assets/js/dataSelector.js" type="module"></script>
     <script src="assets/js/resultNavigation.js" defer></script>
     <script src="assets/js/widgetHandler.js" defer></script>
+
+    <!-- TODO: Load Widget Scripts Dynamically -->
+    <script src="assets/js/widgets/Data/matchDisplay.js" defer></script>
+    <script src="assets/js/widgets/Data/teamDisplay.js" defer></script>
   </head>
 
   <body>
@@ -34,21 +38,58 @@
     <div class="grids">
       <div class="grid-container active">
         <div class="grid-group active">
-            <div class="grid-item" style="grid-column: 1/4; grid-row: 1/4;">
-              <div class="data-raw-display">
-                <div class="entry">
-                  <p>123</p>
-                  <p>5010</p>
-                </div>
-                <div class="entry"></div>
+            <div class="grid-item data-match-raw-display tiger-scrollbar" style="grid-column: 1/4; grid-row: 1/4;">
+            
+
               </div>
-              
-            </div>
         </div>
         <div class="grid-group inactive">
-          <div class="grid-item" style="grid-column: 1/4; grid-row: 1/2;"></div>
-          <div class="grid-item" style="grid-column: 1/4; grid-row: 2/3;"></div>
-          <div class="grid-item" style="grid-column: 1/4; grid-row: 3/4;"></div>
+          <div class="grid-item data-team-raw-display" style="grid-column: 1/4; grid-row: 1/4;">
+            <div class="team-entry">
+              <div class="label">5010</div>
+              <div class="team-name">Tiger Dynasty</div>
+              <table class="cone-table">
+                <caption><object class="caption-icon" data="./assets/svg/cone.svg" type=""></object></caption>
+                <tr>
+                  <th>Low</th>
+                  <th>Medium</th>
+                  <th>High</th>
+                </tr>
+                <tr>
+                  <td>2.5</td>
+                  <td>5.4</td>
+                  <td>2</td>
+                </tr>
+              </table>
+              <table class="cube-table">
+                <caption><object class="caption-icon" data="./assets/svg/cube.svg" type=""></object></caption>
+                <tr>
+                  <th>Low</th>
+                  <th>Medium</th>
+                  <th>High</th>
+                </tr>
+                <tr>
+                  <td>2.5</td>
+                  <td>5.4</td>
+                  <td>2</td>
+                </tr>
+              </table>
+              <table class="station-table">
+                <caption>Charge Station</caption>
+                <tr>
+                  <th>Can Balance</th>
+                  <th>Docked %</th>
+                  <th>Engaged %</th>
+                </tr>
+                <tr>
+                  <td>True</td>
+                  <td>84</td>
+                  <td>67</td>
+                </tr>
+              </table>
+
+            </div>
+          </div>
         </div>
         <div class="grid-group inactive">
           <div class="grid-item" style="grid-column: 1/1; grid-row: 1/4;"></div>
