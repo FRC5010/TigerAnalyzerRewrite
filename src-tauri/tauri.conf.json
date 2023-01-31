@@ -21,7 +21,7 @@
         "all": true
       },
       "fs": {
-        "scope":["$APP/*","$APP"],
+        "scope":["$APP/*","$APP", "$RESOURCE/*", ""],
         "all": true,
         "readFile": true,
         "writeFile": true,
