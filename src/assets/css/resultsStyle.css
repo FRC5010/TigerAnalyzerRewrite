@@ -70,6 +70,12 @@ html {scroll-behavior: smooth;}
     flex-shrink: 0;
 }
 
+.data-team-raw-display {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content:space-evenly;
+}
+
 .data-match-raw-display > .entry {
     width: 96%;
     height: 30px;
@@ -136,7 +142,7 @@ html {scroll-behavior: smooth;}
 }
 
 .data-team-raw-display > .team-entry {
-    width: 50%;
+    width: 45%;
     background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
     background: -moz-linear-gradient(top left, #F45C43, #EB3349);
     background: linear-gradient(to bottom right, #F45C43, #EB3349);
@@ -148,6 +154,7 @@ html {scroll-behavior: smooth;}
     gap: 0px;
     font-family: "Gilroy";
     padding: 10px 0px 50px 0px;
+    flex-shrink: 0;
 }
 
 .team-entry > .station-table {
