@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
     overflow: hidden;
     scroll-behavior: smooth;
@@ -79,8 +85,11 @@ html {scroll-behavior: smooth;}
 .data-match-raw-display > .entry {
     width: 96%;
     height: 30px;
-    border-radius: 15px;
-    border: 2px black solid;
+    background: linear-gradient(white, white) padding-box,
+        linear-gradient(to bottom right, #F45C43, #EB3349) border-box;
+    padding: 5px 0px 5px 0px;
+    border-radius: 25px;
+    border: 4px solid transparent;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -88,6 +97,58 @@ html {scroll-behavior: smooth;}
     gap: 20px;
     font-family: "Gilroy";
 }
+
+.visualize-select-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.visualize-select-screen > .visualize-team-dropdown {
+    appearance: none;
+    width: 250px;
+    height: 40px;
+    text-align: center;
+    background: linear-gradient(white, white) padding-box,
+        linear-gradient(to bottom right, #F45C43, #EB3349) border-box;
+    border-radius: 25px;
+    border: 4px solid transparent;
+    padding: 0.25em 0.5em;
+    font-size: 1.25rem;
+    cursor: pointer;
+    line-height: 1.1;
+    background-color: rgba(255, 255, 255, 0);
+    
+
+}
+
+.visualize-select-screen > .visualize-submit-button {
+    width: 250px;
+    height: 40px;
+    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    border-radius: 25px;
+    margin-top: 10px;
+    color: white;
+    font-size: 24px;
+    font-family: "Gilroy";
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.visualize-submit-button:hover {
+    cursor: pointer;
+    box-shadow:  inset 0px 0px 5px rgb(92, 59, 27);
+}
+
+.visualize-team-dropdown > option {
+    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 
 .data-match-raw-display > .label {
     padding: 0px 20px 0px 20px;
@@ -155,6 +216,7 @@ html {scroll-behavior: smooth;}
     font-family: "Gilroy";
     padding: 10px 0px 50px 0px;
     flex-shrink: 0;
+    margin-top: 20px;
 }
 
 .team-entry > .station-table {
@@ -167,6 +229,76 @@ html {scroll-behavior: smooth;}
 
 .station-table > caption {
     margin-bottom: 5px;
+}
+
+.team-select-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    overflow-y: scroll;
+}
+
+.team-select-grid > .team-option {
+    width: 80%;
+    height: 35px;
+    border-radius: 25px;
+    border: 2px black solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Gilroy";
+    color: black;
+    font-size: 22px;
+    user-select: none;
+}
+
+.team-select-grid > .select-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-evenly;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.team-select-grid > .select-controls > .select-none, .team-select-grid > .select-controls > .select-all {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Gilroy";
+    width: 70px;
+    height: 30px;
+    border-radius: 25px;
+    user-select: none;
+
+} 
+
+.team-select-grid > .select-controls > .select-none:hover, .team-select-grid > .select-controls > .select-all:hover {
+    cursor: pointer;
+}
+
+.team-select-grid > .select-controls > .select-none {
+    border: black 2px solid;
+}
+
+.team-select-grid > .select-controls > .select-all {
+    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
+    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
+    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    color: white;
+}
+
+.team-select-grid > .team-option:hover {
+    cursor: pointer;
+}
+
+.team-select-grid > .team-option.active {
+    border: none;
+    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
+    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
+    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    color: white;
 }
 
 .grid-group.inactive {

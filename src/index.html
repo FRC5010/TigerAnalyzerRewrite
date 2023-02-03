@@ -13,6 +13,7 @@
     <!-- TODO: Load Widget Scripts Dynamically -->
     <script src="assets/js/widgets/Data/matchDisplay.js" defer></script>
     <script src="assets/js/widgets/Data/teamDisplay.js" defer></script>
+    <script src="assets/js/widgets/Analyze/visualizeOptions.js" defer></script>
   </head>
 
   <body>
@@ -44,25 +45,22 @@
               </div>
         </div>
         <div class="grid-group inactive">
-          <div class="grid-item data-team-raw-display" style="grid-column: 1/4; grid-row: 1/4;"></div>
-        </div>
-        <div class="grid-group inactive">
-          <div class="grid-item" style="grid-column: 1/1; grid-row: 1/4;"></div>
-          <div class="grid-item" style="grid-column: 2/4; grid-row: 1/2;"></div>
-          <div class="grid-item" style="grid-column: 2/4; grid-row: 2/4;"></div>
+          <div class="grid-item data-team-raw-display tiger-scrollbar" style="grid-column: 1/4; grid-row: 1/4;"></div>
         </div>
         <div class="dot-nav">
             <div class="dot active"></div>
             <div class="dot"></div>
-            <div class="dot"></div>
-            
         </div>
       </div>
       <div class="grid-container inactive">
         <div class="grid-group active">
-            <div class="grid-item" style="grid-column: 1/1; grid-row: 1/4;"></div>
-            <div class="grid-item" style="grid-column: 2/4; grid-row: 1/2;"></div>
-            <div class="grid-item" style="grid-column: 2/4; grid-row: 2/4;"></div>
+            <div class="grid-item team-select-grid tiger-scrollbar" style="grid-column: 1/2; grid-row: 1/4;">
+              <div class="select-controls">
+                <div class="select-none">None</div>
+                <div class="select-all">All</div>
+              </div>
+            </div>
+            <div class="grid-item analysis-option-grid" style="grid-column: 2/4; grid-row: 1/4;"></div>
         </div>
         <div class="grid-group inactive">
           <div class="grid-item" style="grid-column: 1/4; grid-row: 1/2;"></div>
@@ -76,9 +74,16 @@
       </div>
       <div class="grid-container inactive">
         <div class="grid-group active">
-            <div class="grid-item" style="grid-column: 1/1; grid-row: 1/4;"></div>
-            <div class="grid-item" style="grid-column: 2/4; grid-row: 1/2;"></div>
-            <div class="grid-item" style="grid-column: 2/4; grid-row: 2/4;"></div>
+            <div class="grid-item visualize-select-screen" style="grid-column: 1/4; grid-row: 1/4;">
+              <select class="visualize-team-dropdown" name="teams-visual" id="team-visualize">
+                <option value="5010">5010 - Tiger Dynasty</option>
+                <option value="0000">0000 - Example</option>
+                <option value="0000">0000 - Example</option>
+                <option value="0000">0000 - Example</option>
+              </select>
+              <div class="visualize-submit-button">Visualize</div>
+            </div>
+            
         </div>
         <div class="grid-group inactive">
           <div class="grid-item" style="grid-column: 1/1; grid-row: 1/4;"></div>
