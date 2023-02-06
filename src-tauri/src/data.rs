@@ -105,7 +105,9 @@ pub struct TeamSummary {
     avg_cube_low: f64,
     avg_cube_med: f64,
     avg_cube_high: f64,
-    // TODO: Add Balance %s
+    can_balance: bool,
+    balance_percentage: f64,
+    dock_percentage: f64
 }
 
 // UNSURE OF IMPLEMENTATION FOR AVERAGING
@@ -116,10 +118,12 @@ struct  TeamSummaryAvgCounter {
     avg_cube_low: Vec<u64>,
     avg_cube_med: Vec<u64>,
     avg_cube_high: Vec<u64>,
+    balance_count: Vec<u64>,
+    dock_count: Vec<u64>
 }
 impl TeamSummaryAvgCounter {
     pub fn new() -> TeamSummaryAvgCounter {
-        TeamSummaryAvgCounter { avg_cone_low: Vec::new(), avg_cone_med: Vec::new(), avg_cone_high: Vec::new(), avg_cube_low: Vec::new(), avg_cube_med: Vec::new(), avg_cube_high: Vec::new() }
+        TeamSummaryAvgCounter { avg_cone_low: Vec::new(), avg_cone_med: Vec::new(), avg_cone_high: Vec::new(), avg_cube_low: Vec::new(), avg_cube_med: Vec::new(), avg_cube_high: Vec::new(), balance_count: Vec::new(), dock_count: Vec::new() }
     }
 }
 
@@ -127,6 +131,7 @@ impl TeamSummaryAvgCounter {
 impl TeamSummary {
     pub fn new(team: &FrcTeam) -> TeamSummary {
         let mut avg_count = TeamSummaryAvgCounter::new();
+        let mut balance_flag = false;
         for match_entry in &team.match_data {
             avg_count.avg_cone_low.push(match_entry.cone_low_count);
             avg_count.avg_cone_med.push(match_entry.cone_med_count);
@@ -134,6 +139,25 @@ impl TeamSummary {
             avg_count.avg_cube_low.push(match_entry.cube_low_count);
             avg_count.avg_cube_med.push(match_entry.cube_med_count);
             avg_count.avg_cube_high.push(match_entry.cube_high_count);
+            match match_entry.end_game_balance {
+                BalanceState::OffPlatform => {
+                    avg_count.balance_count.push(0);
+                    avg_count.dock_count.push(0);
+                }
+                
+                BalanceState::OnDocked => {
+                    avg_count.balance_count.push(1);
+                    avg_count.dock_count.push(1);
+                    balance_flag = true;
+                }
+                
+                BalanceState::OnPlatform => {
+                    avg_count.balance_count.push(1);
+                    avg_count.dock_count.push(0);
+                    balance_flag = true;
+                }
+            }
+
         }
 
         TeamSummary { 
@@ -143,7 +167,10 @@ impl TeamSummary {
             avg_cone_high: avg_count.avg_cone_high.iter().copied().sum::<u64>() as f64 /avg_count.avg_cone_high.len() as f64, 
             avg_cube_low: avg_count.avg_cube_low.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_low.len() as f64, 
             avg_cube_med: avg_count.avg_cube_med.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_med.len() as f64,  
-            avg_cube_high: avg_count.avg_cube_high.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_high.len() as f64, }
+            avg_cube_high: avg_count.avg_cube_high.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_high.len() as f64,
+            can_balance: balance_flag,
+            balance_percentage: avg_count.balance_count.iter().copied().sum::<u64>() as f64 /avg_count.balance_count.len() as f64, 
+            dock_percentage: avg_count.dock_count.iter().copied().sum::<u64>() as f64 /avg_count.dock_count.len() as f64 }
 
 
     }

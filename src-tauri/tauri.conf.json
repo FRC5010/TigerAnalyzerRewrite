@@ -81,7 +81,7 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 620,
+        "height": 700,
         "resizable": false,
         "title": "TigerAnalyzer",
         "acceptFirstMouse": true,

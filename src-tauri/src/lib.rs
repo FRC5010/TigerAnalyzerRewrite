@@ -1,6 +1,7 @@
 use std::hash::Hash;
 use std::{error::Error, collections::HashMap};
 use data::{FrcTeam, MatchEntry};
+use rust_xlsxwriter::Workbook;
 use tauri::{Manager};
 use tauri::App;
 
@@ -42,6 +43,12 @@ fn submit_data(handle: tauri::AppHandle, data_path: &str) -> HashMap<u64, FrcTea
     let data: HashMap<u64, FrcTeam> = read_scout_data(data_path).unwrap();
     return data;
 
+}
+
+#[tauri::command]
+fn export_file(handle: tauri::AppHandle) {
+  let mut workbook = Workbook::new();
+  
 }
 
 #[derive(Default)]

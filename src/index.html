@@ -14,6 +14,7 @@
     <script src="assets/js/widgets/Data/matchDisplay.js" defer></script>
     <script src="assets/js/widgets/Data/teamDisplay.js" defer></script>
     <script src="assets/js/widgets/Analyze/visualizeOptions.js" defer></script>
+    <script src="assets/js/widgets/Match/matchOverviewDisplay.js" defer></script>
   </head>
 
   <body>
@@ -32,7 +33,7 @@
     <div class="navbar">
       <div class="nav-item active"><p>Data<p></div>
       <div class="nav-item"><p>Analyze<p></div>
-      <div class="nav-item"><p>Visualize<p></div>
+      <div class="nav-item"><p>Match<p></div>
       <div class="nav-item"><p>Export<p></div>
       <div class="up-arrow"></div>
     </div>
@@ -60,7 +61,10 @@
                 <div class="select-all">All</div>
               </div>
             </div>
-            <div class="grid-item analysis-option-grid" style="grid-column: 2/4; grid-row: 1/4;"></div>
+            <div class="grid-item analysis-option-grid" style="grid-column: 2/4; grid-row: 1/4;">
+              <div class="analysis-option-form"></div>
+              <div class="analyze-button">Analyze</div>
+            </div>
         </div>
         <div class="grid-group inactive">
           <div class="grid-item" style="grid-column: 1/4; grid-row: 1/2;"></div>
@@ -74,14 +78,40 @@
       </div>
       <div class="grid-container inactive">
         <div class="grid-group active">
-            <div class="grid-item visualize-select-screen" style="grid-column: 1/4; grid-row: 1/4;">
-              <select class="visualize-team-dropdown" name="teams-visual" id="team-visualize">
-                <option value="5010">5010 - Tiger Dynasty</option>
-                <option value="0000">0000 - Example</option>
-                <option value="0000">0000 - Example</option>
-                <option value="0000">0000 - Example</option>
-              </select>
-              <div class="visualize-submit-button">Visualize</div>
+            <div class="grid-item match-overview-screen" style="grid-column: 1/4; grid-row: 1/4;">
+              <div class="team-select-bar">
+                <div class="blue-team-select team-select-set">
+                  <select class="team-select" data-card-id="blue-card-0"></select>
+                  <select class="team-select" data-card-id="blue-card-1"></select>
+                  <select class="team-select" data-card-id="blue-card-2" ></select>
+                  
+                  <div class="blue-indicator"></div>
+                </div>
+
+                <div class="red-team-select team-select-set">
+                  <div class="red-indicator"></div>
+                  <select class="team-select" data-card-id="red-card-0"></select>
+                  <select class="team-select" data-card-id="red-card-1"></select>
+                  <select class="team-select" data-card-id="red-card-2"></select>
+                </div>
+              </div>
+
+              <div class="blue alliance-group">
+                <div class="team-card" id="blue-card-0"></div>
+                <div class="team-card" id="blue-card-1"></div>
+                <div class="team-card" id="blue-card-2"></div>
+              </div>
+              <div class="vs-separator">
+                <div class="line"></div>
+                <div class="vs">VS</div>
+                <div class="line"><div class="export-button">></div></div>
+                
+              </div>
+              <div class="red alliance-group">
+                <div class="team-card" id="red-card-0"></div>
+                <div class="team-card" id="red-card-1"></div>
+                <div class="team-card" id="red-card-2"></div>
+              </div>
             </div>
             
         </div>

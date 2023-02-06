@@ -1,3 +1,8 @@
+// TODO: Add Search Feature
+// TODO: Add overview for match with teams
+// TODO: Team Comparison Feature
+// TODO: Dot menu for teams to access more info
+
 function round2Two(number) {
   return +(Math.round(number + "e+2")  + "e-2");
 }
@@ -12,8 +17,8 @@ function fillRawTeamData(event) {
       teamEntry.classList.add("team-entry")
       // May be unwise to use innerHtml as it will execute any html put in the variables...but its probably fine...
       teamEntry.innerHTML = `
-      <div class="label">${team.team_number}</div>
-              <div class="team-name">${team.tba_data.nickname}</div>
+              <div class="label">${team.team_number}</div>
+              <div class="team-name">${team.tba_data.nickname} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
               <table class="cone-table">
                 <caption><object class="caption-icon" data="./assets/svg/cone.svg" type=""></object></caption>
                 <tr>
@@ -48,9 +53,9 @@ function fillRawTeamData(event) {
                   <th>Engaged %</th>
                 </tr>
                 <tr>
-                  <td>None</td>
-                  <td>None</td>
-                  <td>None</td>
+                  <td>${team.summary.can_balance}</td>
+                  <td>${round2Two(team.summary.dock_percentage*100)}</td>
+                  <td>${round2Two(team.summary.balance_percentage*100)}</td>
                 </tr>
               </table>
       `
