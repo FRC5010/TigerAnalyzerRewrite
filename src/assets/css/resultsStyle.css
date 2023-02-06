@@ -252,7 +252,7 @@ html {scroll-behavior: smooth;}
 
 
 .alliance-group.red > .team-card {
-    background: linear-gradient(to bottom right, #f44343, #eb3333);
+    background: linear-gradient(to bottom right, #e91919, #e80909);
 }
 
 .alliance-group.blue > .team-card {
@@ -372,6 +372,18 @@ html {scroll-behavior: smooth;}
     padding: 10px 0px 50px 0px;
     flex-shrink: 0;
     margin-top: 20px;
+    position: relative;
+}
+
+.team-entry > .dot-menu {
+    position: absolute;
+    right: 5%;
+    top: 0px;
+    color: white;font-size: 22px;
+}
+
+.team-entry > .dot-menu:hover {
+    cursor: pointer;
 }
 
 .team-entry > .station-table {

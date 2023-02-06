@@ -5,6 +5,8 @@ function updateTeamCard(event, data) {
     if (!teamNumber) return;
     let team = data[teamNumber];
     // TODO: Implement Charge Station Stats
+    // TODO: Add Progress/Circle Percentage Meters for Charge Station Stats
+    // TODO: Add Export to Pretty Image/Banner of the Match
     teamCard.innerHTML = `
     <div class="label">${team.team_number}</div>
                   <div class="team-name">${team.tba_data.nickname} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>

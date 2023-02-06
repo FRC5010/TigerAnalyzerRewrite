@@ -1,5 +1,4 @@
 // TODO: Add Search Feature
-// TODO: Add overview for match with teams
 // TODO: Team Comparison Feature
 // TODO: Dot menu for teams to access more info
 
