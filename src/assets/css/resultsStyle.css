@@ -74,6 +74,7 @@ html {scroll-behavior: smooth;}
     row-gap: 2px;
     overflow-y: scroll;
     flex-shrink: 0;
+    overflow-x: hidden;
 }
 
 .data-team-raw-display {
@@ -242,6 +243,12 @@ html {scroll-behavior: smooth;}
     gap: 10px;
 }
 
+.cones-row > .cone-table, .cubes-row > .cube-table {
+    /* Space out the columns of a table more */
+    border-spacing: 5px;
+
+}
+
 .cones-row > .caption-icon, .cubes-row > .caption-icon {
     width: 30px;
     height: 30px;
@@ -286,11 +293,14 @@ html {scroll-behavior: smooth;}
     width: 20px;
     display: flex;
     font-family: "Gilroy";
-    color: white;
+    color: black;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     border-radius: 25px;
+    background-color: white;
+    background: white;
+    border: 2px solid black;
 }
 
 .visualize-submit-button:hover {
@@ -379,7 +389,45 @@ html {scroll-behavior: smooth;}
     position: absolute;
     right: 5%;
     top: 0px;
-    color: white;font-size: 22px;
+    color: black;font-size: 22px;
+    z-index: 2;
+}
+
+.team-entry > .card-options-menu {
+    width: 0px;
+    height: 100%;
+    z-index: 1;
+    background-color: white;
+    border-radius: 15px;
+    position: absolute;
+    top: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border-left: #912c00 solid 3px;
+    gap: 10px;
+    right: 0px;
+    transition: 0.2s;
+    opacity: 0;
+}
+
+.card-options-menu.visible {
+    width: 150px;
+    opacity: 1;
+}
+
+.card-options-menu > .card-option {
+    width: 80%;
+    height: 25px;
+    border-radius: 15px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
+    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
+    background: linear-gradient(to bottom right, #F45C43, #EB3349);
 }
 
 .team-entry > .dot-menu:hover {

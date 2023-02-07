@@ -6,6 +6,19 @@ function round2Two(number) {
   return +(Math.round(number + "e+2")  + "e-2");
 }
 
+function toggleCardOptions(event) {
+  let teamCard = event.target.parentElement;
+  let optionsMenu = teamCard.querySelector(".card-options-menu");
+  console.log(event);
+  if (optionsMenu.classList.contains("visible")) {
+    console.log("visible")
+    optionsMenu.classList.remove("visible")
+  } else {
+    console.log("not visible")
+    optionsMenu.classList.add("visible");
+  }
+}
+
 function fillRawTeamData(event) {
     let data = event.detail.scout_data;
     let teams = Object.values(data);
@@ -15,9 +28,16 @@ function fillRawTeamData(event) {
       let teamEntry = document.createElement("div");
       teamEntry.classList.add("team-entry")
       // May be unwise to use innerHtml as it will execute any html put in the variables...but its probably fine...
+
       teamEntry.innerHTML = `
+              <div class="dot-menu">&#8230;</div>
+              <div class="card-options-menu">
+                <div class="card-option" style="margin-top: 30px;">Expand...</div>
+                <div class="card-option">Compare</div>
+                <div class="card-option">More Info</div>
+              </div>
               <div class="label">${team.team_number}</div>
-              <div class="team-name">${team.tba_data.nickname} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
+              <div class="team-name">${(team.tba_data.nickname) ? team.tba_data.nickname:"Team"} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
               <table class="cone-table">
                 <caption><object class="caption-icon" data="./assets/svg/cone.svg" type=""></object></caption>
                 <tr>
@@ -58,10 +78,15 @@ function fillRawTeamData(event) {
                 </tr>
               </table>
       `
-
       teamEntryList.appendChild(teamEntry);
 
+      
+
     });
+    Array.from(teamEntryList.getElementsByClassName("dot-menu")).forEach(menu => {
+      menu.addEventListener("click", toggleCardOptions);
+      console.log("added event listener");
+    })
 }
   
 document.addEventListener("data_loaded", fillRawTeamData);

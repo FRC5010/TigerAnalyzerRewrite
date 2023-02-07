@@ -7,9 +7,10 @@ function updateTeamCard(event, data) {
     // TODO: Implement Charge Station Stats
     // TODO: Add Progress/Circle Percentage Meters for Charge Station Stats
     // TODO: Add Export to Pretty Image/Banner of the Match
+    
     teamCard.innerHTML = `
     <div class="label">${team.team_number}</div>
-                  <div class="team-name">${team.tba_data.nickname} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
+                  <div class="team-name">${(team.tba_data.nickname) ? team.tba_data.nickname:"Team"} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
                   <div class="cones-row">
                   <object class="caption-icon" data="./assets/svg/cone.svg" type=""></object>
                     <table class="cone-table">
