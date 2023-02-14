@@ -1,27 +1,5 @@
-let teamOptionsBox = document.querySelector(".team-select-grid");
-
 function round2Two(number) {
     return +(Math.round(number + "e+2")  + "e-2");
-}
-
-function unselectAllOptions() {
-    let options = document.querySelector(".team-select-grid").getElementsByClassName("team-option");
-    for (let option of options) {
-        option.classList.remove("active");
-    }
-}
-
-function selectAllOptions() {
-    let options = document.querySelector(".team-select-grid").getElementsByClassName("team-option");
-    for (let option of options) {
-        option.classList.add("active");
-    }
-}
-
-function toggleOption(event) {
-    let option = event.srcElement;
-    if (option.classList.contains("active")) option.classList.remove("active");
-    else option.classList.add("active");
 }
 
 function getValueStroke(value) {
@@ -33,34 +11,10 @@ function getValueStroke(value) {
 
 function populateOptions(data) {
     let teams = Object.values(data);
-    let options = document.querySelector(".team-select-grid");
-    teams.forEach(team => {
-        let option = document.createElement("div");
-        option.classList.add("team-option");
-        option.textContent = team.team_number;
-        // ADD Event Listener for handling click/unclick
-        option.addEventListener("click", toggleOption)
-        options.appendChild(option);
-    });
 
     invoke('get_team_rankings', {'teamData':data}).then((team_rankings) => {
-        console.log(team_rankings);
         let rankings = document.querySelector(".analysis-ranking-board");
 
-        /*
-        Make a new div for each team in the rankings in this format using string literals and innerHTML:
-        <div class="analysis-rank-entry">
-                <div class="id-data">
-                  <div class="team-number">5010</div>
-                </div>
-                <div class="rate-data">
-                  <div class="sub-rating rating-bar ldBar label-center" data-preset="circle" data-value="20"></div>
-                  <div class="sub-rating rating-bar ldBar label-center" data-preset="circle" data-value="90"></div>
-                  <div class="sub-rating rating-bar ldBar label-center" data-preset="circle" data-value="40"></div>
-                  <div class="overall-rating rating-bar ldBar label-center" data-preset="circle" data-value="50"></div>
-                </div>
-              </div>
-        */
         team_rankings.forEach(team => {
             div = document.createElement("div");
             div.classList.add("analysis-rank-entry");
@@ -91,11 +45,8 @@ function populateOptions(data) {
 
 function initialize(event) {
     let scout_data = event.detail.scout_data;
-
     populateOptions(scout_data);
 }
 
 document.addEventListener("data_loaded", initialize)
-teamOptionsBox.querySelector(".select-none").addEventListener("click", unselectAllOptions);
-teamOptionsBox.querySelector(".select-all").addEventListener("click", selectAllOptions);
 
