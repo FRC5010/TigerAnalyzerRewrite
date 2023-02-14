@@ -1,9 +1,14 @@
 use std::hash::Hash;
 use std::{error::Error, collections::HashMap};
-use data::{FrcTeam, MatchEntry};
+use data::{FrcTeam, MatchEntry, TeamRanking};
 use rust_xlsxwriter::Workbook;
 use tauri::{Manager};
 use tauri::App;
+
+// TODO: Add rating system for teams
+// TODO: Add system for ranking/rating possible alliances (usually 3)
+// TODO: Add individual ranking system and add system for selecting teams who match up best with your team
+
 
 extern crate csv;
 extern crate serde;
@@ -37,6 +42,17 @@ fn read_scout_data(data_path: &str) -> Result<HashMap<u64, FrcTeam>, Box<dyn Err
     Ok(team_list)
 }
 
+
+fn generate_rankings(team_data: HashMap<u64, FrcTeam>) -> Vec<TeamRanking> {
+    TeamRanking::generate_rankings(team_data)
+}
+
+#[tauri::command]
+fn get_team_rankings(handle: tauri::AppHandle, team_data: HashMap<u64, FrcTeam>) -> Vec<TeamRanking> {
+    let mut data: Vec<TeamRanking> = generate_rankings(team_data); 
+    data.sort_by(|a, b| b.overall_rating.partial_cmp(&a.overall_rating).unwrap_or(std::cmp::Ordering::Equal));
+    return data;
+}
 
 #[tauri::command]
 fn submit_data(handle: tauri::AppHandle, data_path: &str) -> HashMap<u64, FrcTeam> {
@@ -79,7 +95,7 @@ impl AppBuilder {
         }
         Ok(())
       })
-      .invoke_handler(tauri::generate_handler![submit_data])
+      .invoke_handler(tauri::generate_handler![submit_data, get_team_rankings])
       .run(tauri::generate_context!())
       .expect("error while running tauri application");
   }

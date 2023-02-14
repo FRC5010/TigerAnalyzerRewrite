@@ -489,39 +489,82 @@ html {scroll-behavior: smooth;}
 
 } 
 
-.analysis-option-grid {
+.analysis-ranking-board {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
+    justify-content: flex-start;
+    overflow-y: scroll;
 }
 
-.analysis-option-grid > .analysis-option-form {
-    width: 300px;
-    height: 300px;
+.analysis-rank-entry {
+    margin-top: 10px;
+    width: 95%;
+    height: 100px;
     border-radius: 25px;
     background-color: white;
 }
 
-.analysis-option-grid > .analyze-button {
-    height: 40px;
-    width: 200px;
-    border-radius: 25px;
-    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
-    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
-    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+.analysis-rank-entry {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    user-select: none;
-    font-size: 22px;
-    font-family: "Gilroy";
-    color: white;
+    justify-content:space-between;
 }
 
-.analysis-option-grid > .analyze-button:hover {
-    cursor: pointer;
+.analysis-rank-entry > .id-data {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+
+}
+
+.id-data > .team-number {
+    font-family: "Gilroy";
+    font-size: 44px;
+    font-weight: bold;
+    color: black;
+}
+
+.analysis-rank-entry > .rate-data {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end; 
+    margin-right: 10px;
+    gap: 10px;
+}
+
+.rating-bar {
+    stroke-linecap: round;
+}
+
+.rating-bar > .ldBar-label {
+    font-family: "Gilroy";
+    font-size: 26px;
+    color: orange;
+}
+
+.rating-bar > .ldBar-label:after {
+    content: "RPV";
+    font-size: 12px;
+}
+
+.rating-bar.sub-rating {
+    width: 60px !important;
+    height: 60px !important;
+
+}
+
+.rating-bar.sub-rating > .ldBar-label {
+    font-size: 22px;
+}
+
+.rating-bar.sub-rating > .ldBar-label:after {
+    content: "";
 }
 
 .team-select-grid > .select-controls > .select-none:hover, .team-select-grid > .select-controls > .select-all:hover {

@@ -6,15 +6,22 @@
     <title>Tiger Analyzer</title>
     <link rel="stylesheet" href="assets/css/inputStyle.css">
     <link rel="stylesheet" href="assets/css/resultsStyle.css">
+
+
     <script src="assets/js/dataSelector.js" type="module"></script>
     <script src="assets/js/resultNavigation.js" defer></script>
     <script src="assets/js/widgetHandler.js" defer></script>
+
+    <!-- Libraries -->
+    <link rel="stylesheet" href="assets/libraries/loading-bar/dist/loading-bar.min.css">
+    <script src="assets/libraries/loading-bar/dist/loading-bar.min.js"></script>
 
     <!-- TODO: Load Widget Scripts Dynamically -->
     <script src="assets/js/widgets/Data/matchDisplay.js" defer></script>
     <script src="assets/js/widgets/Data/teamDisplay.js" defer></script>
     <script src="assets/js/widgets/Analyze/visualizeOptions.js" defer></script>
     <script src="assets/js/widgets/Match/matchOverviewDisplay.js" defer></script>
+  
   </head>
 
   <body>
@@ -111,9 +118,7 @@
                 <div class="select-all">All</div>
               </div>
             </div>
-            <div class="grid-item analysis-option-grid" style="grid-column: 2/4; grid-row: 1/4;">
-              <div class="analysis-option-form"></div>
-              <div class="analyze-button">Analyze</div>
+            <div class="grid-item analysis-ranking-board" style="grid-column: 2/4; grid-row: 1/4;">
             </div>
         </div>
         <div class="grid-group inactive">

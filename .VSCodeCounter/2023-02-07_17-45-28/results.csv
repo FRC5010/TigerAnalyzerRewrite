@@ -1,0 +1,42 @@
+"filename", "language", "JSON", "Rust", "Groovy", "Java Properties", "Batch", "XML", "TOML", "HTML", "JavaScript", "CSS", "Markdown", "comment", "blank", "total"
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\README.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 4
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\package-lock.json", "JSON", 755, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 756
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\package.json", "JSON", 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 17
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\.cargo\config.toml", "TOML", 0, 0, 0, 0, 0, 0, 38, 0, 0, 0, 0, 0, 4, 42
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\Cargo.lock", "TOML", 0, 0, 0, 0, 0, 0, 3566, 0, 0, 0, 0, 2, 386, 3954
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\Cargo.toml", "TOML", 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 5, 6, 35
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\build.rs", "Rust", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\gen\android\tiger-analyzer\app\src\main\AndroidManifest.xml", "XML", 0, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 3, 21
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\gen\android\tiger-analyzer\app\src\main\res\drawable-v24\ic_launcher_foreground.xml", "XML", 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 30
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\gen\android\tiger-analyzer\app\src\main\res\drawable\ic_launcher_background.xml", "XML", 0, 0, 0, 0, 0, 170, 0, 0, 0, 0, 0, 0, 1, 171
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\gen\android\tiger-analyzer\app\src\main\res\layout\activity_main.xml", "XML", 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 2, 18
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\gen\android\tiger-analyzer\app\src\main\res\values-night\themes.xml", "XML", 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 5, 1, 17
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\gen\android\tiger-analyzer\app\src\main\res\values\colors.xml", "XML", 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 10
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\gen\android\tiger-analyzer\app\src\main\res\values\strings.xml", "XML", 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\gen\android\tiger-analyzer\app\src\main\res\values\themes.xml", "XML", 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 5, 1, 17
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\gen\android\tiger-analyzer\gradle.properties", "Java Properties", 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 19, 0, 23
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\gen\android\tiger-analyzer\gradle\wrapper\gradle-wrapper.properties", "Java Properties", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 1, 1, 7
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\gen\android\tiger-analyzer\gradlew.bat", "Batch", 0, 0, 0, 0, 68, 0, 0, 0, 0, 0, 0, 0, 22, 90
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\gen\android\tiger-analyzer\settings.gradle", "Groovy", 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\src\data.rs", "Rust", 0, 192, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 32, 225
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\src\lib.rs", "Rust", 0, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 91
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\src\main.rs", "Rust", 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 13
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\src\mobile.rs", "Rust", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src-tauri\tauri.conf.json", "JSON", 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 69, 0, 93
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\css\inputStyle.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 114, 0, 0, 24, 138
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\css\resultsStyle.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 577, 0, 1, 106, 684
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\icons\ios_share_FILL0_wght400_GRAD0_opsz48.svg", "XML", 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\javascript.svg", "XML", 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\js\dataSelector.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 27, 0, 0, 0, 11, 38
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\js\resultNavigation.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 2, 20, 76
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\js\utils\formatNumber.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\js\widgetHandler.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 2, 17
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\js\widgets\Analyze\visualizeOptions.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 36, 0, 0, 1, 10, 47
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\js\widgets\Data\matchDisplay.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 7, 6, 34
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\js\widgets\Data\teamDisplay.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 79, 0, 0, 4, 10, 93
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\js\widgets\Match\matchOverviewDisplay.js", "JavaScript", 0, 0, 0, 0, 0, 0, 0, 0, 67, 0, 0, 3, 12, 82
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\svg\cone.svg", "XML", 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\svg\cube.svg", "XML", 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 1, 7, 16
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\assets\tauri.svg", "XML", 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 1, 7
+"c:\Users\akolt\OneDrive\Documents\GitHub\TigerAnalyzerRewrite\src\index.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 181, 0, 0, 0, 1, 15, 197
+"Total", "-", 795, 284, 1, 9, 68, 289, 3628, 181, 302, 691, 2, 128, 712, 7090

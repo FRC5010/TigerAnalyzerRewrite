@@ -14,6 +14,7 @@ async function open_results() {
     console.log(scout_data);
     await populate_results(scout_data).then(() => {document.querySelector('.navbar').scrollIntoView(true)});
   }, (reason) => { console.error(reason);});
+
 }
 
 async function get_filePath() {

@@ -55,7 +55,7 @@ where
     D: de::Deserializer<'de>,
 {
     let s: &str =
-        de::Deserialize::deserialize(deserializer)?;
+        de::Deserialize::deserialize(deserializer).unwrap_or("false");
     
     match s {
         "true"|"TRUE" => Ok(true),
@@ -71,12 +71,15 @@ fn from_charge_station_int<'de, D>(
 where 
     D: de::Deserializer<'de>,
 {
-    let num: u64 = 
+    let num: &str = 
         de::Deserialize::deserialize(deserializer)?;
     match num {
-        0 => Ok(BalanceState::OffPlatform),
-        1 => Ok(BalanceState::OnPlatform),
-        2 => Ok(BalanceState::OnDocked),
+        "0" => Ok(BalanceState::OffPlatform),
+        "OffPlatform" => Ok(BalanceState::OffPlatform),
+        "1" => Ok(BalanceState::OnPlatform),
+        "OnPlatform" => Ok(BalanceState::OnPlatform),
+        "2" => Ok(BalanceState::OnDocked),
+        "OnDocked" => Ok(BalanceState::OnDocked),
         _ => Err(de::Error::custom("Not a valid Balance Status"))
     }
 }
@@ -96,18 +99,21 @@ where
 }
 
 
-#[derive(Debug, Default, Clone, Serialize)]
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct TeamSummary {
-    team_number: u64,
-    avg_cone_low: f64,
-    avg_cone_med: f64,
-    avg_cone_high: f64,
-    avg_cube_low: f64,
-    avg_cube_med: f64,
-    avg_cube_high: f64,
-    can_balance: bool,
-    balance_percentage: f64,
-    dock_percentage: f64
+    pub team_number: u64,
+    pub avg_cone_low: f64,
+    pub avg_cone_med: f64,
+    pub avg_cone_high: f64,
+    pub avg_cube_low: f64,
+    pub avg_cube_med: f64,
+    pub avg_cube_high: f64,
+    pub avg_low: f64,
+    pub avg_med: f64,
+    pub avg_high: f64,
+    pub can_balance: bool,
+    pub balance_percentage: f64,
+    pub dock_percentage: f64
 }
 
 // UNSURE OF IMPLEMENTATION FOR AVERAGING
@@ -146,7 +152,7 @@ impl TeamSummary {
                 }
                 
                 BalanceState::OnDocked => {
-                    avg_count.balance_count.push(1);
+                    avg_count.balance_count.push(0);
                     avg_count.dock_count.push(1);
                     balance_flag = true;
                 }
@@ -168,18 +174,103 @@ impl TeamSummary {
             avg_cube_low: avg_count.avg_cube_low.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_low.len() as f64, 
             avg_cube_med: avg_count.avg_cube_med.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_med.len() as f64,  
             avg_cube_high: avg_count.avg_cube_high.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_high.len() as f64,
+            avg_low: avg_count.avg_cone_low.iter().copied().sum::<u64>() as f64 / avg_count.avg_cone_low.len() as f64 + avg_count.avg_cube_low.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_low.len() as f64,
             can_balance: balance_flag,
-            balance_percentage: avg_count.balance_count.iter().copied().sum::<u64>() as f64 /avg_count.balance_count.len() as f64, 
+            avg_med: avg_count.avg_cone_med.iter().copied().sum::<u64>() as f64 /avg_count.avg_cone_med.len() as f64 + avg_count.avg_cube_med.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_med.len() as f64,
+            avg_high: avg_count.avg_cone_high.iter().copied().sum::<u64>() as f64 /avg_count.avg_cone_high.len() as f64 + avg_count.avg_cube_high.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_high.len() as f64,
+            balance_percentage: 0.0 + avg_count.balance_count.iter().copied().sum::<u64>() as f64 /avg_count.balance_count.len() as f64, 
             dock_percentage: avg_count.dock_count.iter().copied().sum::<u64>() as f64 /avg_count.dock_count.len() as f64 }
 
 
     }
 }
 
-#[derive(Debug, Default, Clone , Serialize)]
+#[derive(Debug, Default, Clone, Serialize)]
+pub struct RankMaxCount {
+    pub low: f64,
+    pub medium: f64,
+    pub high: f64,
+    pub balance: f64,
+    pub dock: f64
+}
+
+pub struct rankBiases {
+    pub low: f64,
+    pub medium: f64,
+    pub high: f64,
+    pub balance: f64,
+    pub dock: f64
+}
+
+#[derive(Debug, Default, Clone, Serialize)]
+pub struct TeamRanking {
+    pub team_number: u64,
+    pub overall_rating: f64,
+    pub low_rating: f64,
+    pub medium_rating: f64,
+    pub high_rating: f64,
+    pub balance_rating: f64,
+    pub dock_rating: f64,
+    pub data_reliability_rating: f64
+}
+
+impl TeamRanking {
+    pub fn generate_rankings(teams: HashMap<u64, FrcTeam>) -> Vec<TeamRanking> {
+        let mut maxCount = RankMaxCount::default();
+        let mut rankings = Vec::new();
+
+        // TODO: Make these better to configure
+        let total_points: f64 = 20.0;
+        let biases = rankBiases {
+            low: 2.0/total_points,
+            medium: 3.0/total_points,
+            high: 5.0/total_points,
+            balance: 6.0/total_points, // This is the remainder of Dock so its not in the total_points
+            dock: 10.0/total_points
+        };
+
+        // TODO: Optimize to not iterate through all teams twice
+        for team in teams.values() {
+            let team_summary = team.get_summary().as_ref().unwrap();
+            if team_summary.avg_low > maxCount.low {
+                maxCount.low = team_summary.avg_low;
+            }
+            if team_summary.avg_med > maxCount.medium {
+                maxCount.medium = team_summary.avg_med;
+            }
+            if team_summary.avg_high > maxCount.high {
+                maxCount.high = team_summary.avg_high;
+            }
+            if team_summary.balance_percentage > maxCount.balance {
+                maxCount.balance = team_summary.balance_percentage;
+            }
+            if team_summary.dock_percentage > maxCount.dock {
+                maxCount.dock = team_summary.dock_percentage;
+            }
+        };
+        for team in teams.values() {
+            let team_summary = team.get_summary().as_ref().unwrap();
+            let mut ranking = TeamRanking::default();
+            ranking.team_number = team.team_number;
+            ranking.low_rating = team_summary.avg_low / maxCount.low;
+            ranking.medium_rating = team_summary.avg_med / maxCount.medium;
+            ranking.high_rating = team_summary.avg_high / maxCount.high;
+            ranking.balance_rating = team_summary.balance_percentage / maxCount.balance;
+            ranking.dock_rating = team_summary.dock_percentage / maxCount.dock;
+            ranking.data_reliability_rating = 1.0;
+            ranking.overall_rating = (ranking.low_rating*biases.low + ranking.medium_rating*biases.medium + ranking.high_rating*biases.high + ranking.balance_rating*biases.balance + ranking.dock_rating*biases.dock + ranking.data_reliability_rating*0.0); // ONLY FOR TESTING
+            rankings.push(ranking);
+        };
+        rankings
+
+    }
+        
+}
+
+#[derive(Debug, Default, Clone , Serialize, Deserialize)]
 pub struct FrcTeam {
     version_id: u64,
-    team_number: u64,
+    pub team_number: u64,
     match_data: Vec<MatchEntry>,
     summary: Option<TeamSummary>,
     tba_data: Option<HashMap<String, serde_json::Value>>
@@ -187,7 +278,7 @@ pub struct FrcTeam {
 
 impl FrcTeam {
     pub fn new(team_number: u64) -> FrcTeam {
-        FrcTeam { version_id: 1, team_number: team_number, match_data: Vec::new(), summary: None, tba_data: None }
+        FrcTeam { version_id: 1, team_number: team_number, match_data: Vec::new(), summary: None, tba_data: None} 
     }
 
     pub fn generate_summary(&mut self) {
