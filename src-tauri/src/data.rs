@@ -194,7 +194,7 @@ pub struct RankMaxCount {
     pub dock: f64
 }
 
-pub struct rankBiases {
+pub struct PointValues {
     pub low: f64,
     pub medium: f64,
     pub high: f64,
@@ -220,13 +220,12 @@ impl TeamRanking {
         let mut rankings = Vec::new();
 
         // TODO: Make these better to configure
-        let total_points: f64 = 20.0;
-        let biases = rankBiases {
-            low: 2.0/total_points,
-            medium: 3.0/total_points,
-            high: 5.0/total_points,
-            balance: 6.0/total_points, // This is the remainder of Dock so its not in the total_points
-            dock: 10.0/total_points
+        let point_values = PointValues {
+            low: 2.0,
+            medium: 3.0,
+            high: 5.0,
+            balance: 6.0, // This is the remainder of Dock so its not in the total_points
+            dock: 10.0
         };
 
         // TODO: Optimize to not iterate through all teams twice
@@ -248,6 +247,9 @@ impl TeamRanking {
                 maxCount.dock = team_summary.dock_percentage;
             }
         };
+
+        let totalPoints = (maxCount.low*point_values.low + maxCount.medium*point_values.medium + maxCount.high*point_values.high + maxCount.balance*point_values.balance + maxCount.dock*point_values.dock);
+
         for team in teams.values() {
             let team_summary = team.get_summary().as_ref().unwrap();
             let mut ranking = TeamRanking::default();
@@ -258,7 +260,7 @@ impl TeamRanking {
             ranking.balance_rating = team_summary.balance_percentage / maxCount.balance;
             ranking.dock_rating = team_summary.dock_percentage / maxCount.dock;
             ranking.data_reliability_rating = 1.0;
-            ranking.overall_rating = (ranking.low_rating*biases.low + ranking.medium_rating*biases.medium + ranking.high_rating*biases.high + ranking.balance_rating*biases.balance + ranking.dock_rating*biases.dock + ranking.data_reliability_rating*0.0); // ONLY FOR TESTING
+            ranking.overall_rating = (team_summary.avg_low*point_values.low + team_summary.avg_med*point_values.medium + team_summary.avg_high*point_values.high + team_summary.balance_percentage*point_values.balance + team_summary.dock_percentage*point_values.dock)/totalPoints;
             rankings.push(ranking);
         };
         rankings

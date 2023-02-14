@@ -29,3 +29,4 @@ date,match_type,team_number,tba_match_data,alliance,cone_low_count,cone_med_coun
 13432345,qa,19020,,red,10,4,4,4,7,4,FALSE,2,2
 13416345,qa,20010,,blue,7,3,3,3,7,2,TRUE,1,1
 14452345,qa,21010,,red,9,3,1,6,8,1,TRUE,2,0
+12304563,qa,5010,,blue,20,20,20,21,19,9,FALSE,0,0
