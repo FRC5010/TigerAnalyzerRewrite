@@ -1,6 +1,6 @@
 use std::hash::Hash;
 use std::{error::Error, collections::HashMap};
-use data::{FrcTeam, MatchEntry, TeamRanking};
+use data::{FrcTeam, MatchEntry, TeamRanking, RankOptions};
 use rust_xlsxwriter::Workbook;
 use tauri::{Manager};
 use tauri::App;
@@ -43,13 +43,13 @@ fn read_scout_data(data_path: &str) -> Result<HashMap<u64, FrcTeam>, Box<dyn Err
 }
 
 
-fn generate_rankings(team_data: HashMap<u64, FrcTeam>) -> Vec<TeamRanking> {
-    TeamRanking::generate_rankings(team_data)
+fn generate_rankings(team_data: HashMap<u64, FrcTeam>, options: RankOptions) -> Vec<TeamRanking> {
+    TeamRanking::generate_rankings(team_data, options)
 }
 
 #[tauri::command]
-fn get_team_rankings(handle: tauri::AppHandle, team_data: HashMap<u64, FrcTeam>) -> Vec<TeamRanking> {
-    let mut data: Vec<TeamRanking> = generate_rankings(team_data); 
+fn get_team_rankings(handle: tauri::AppHandle, team_data: HashMap<u64, FrcTeam>, options: RankOptions) -> Vec<TeamRanking> {
+    let mut data: Vec<TeamRanking> = generate_rankings(team_data, options); 
     data.sort_by(|a, b| b.overall_rating.partial_cmp(&a.overall_rating).unwrap_or(std::cmp::Ordering::Equal));
     return data;
 }

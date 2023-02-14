@@ -30,12 +30,6 @@ function fillRawTeamData(event) {
       // May be unwise to use innerHtml as it will execute any html put in the variables...but its probably fine...
 
       teamEntry.innerHTML = `
-              <div class="dot-menu">&#8230;</div>
-              <div class="card-options-menu">
-                <div class="card-option" style="margin-top: 30px;">Expand...</div>
-                <div class="card-option">Compare</div>
-                <div class="card-option">More Info</div>
-              </div>
               <div class="label">${team.team_number}</div>
               <div class="team-name">${(team.tba_data.nickname) ? team.tba_data.nickname:"Team"} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
               <table class="cone-table">

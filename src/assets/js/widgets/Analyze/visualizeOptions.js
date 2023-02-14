@@ -12,7 +12,7 @@ function getValueStroke(value) {
 function populateOptions(data) {
     let teams = Object.values(data);
 
-    invoke('get_team_rankings', {'teamData':data}).then((team_rankings) => {
+    invoke('get_team_rankings', {'teamData':data, 'options':{}}).then((team_rankings) => {
         let rankings = document.querySelector(".analysis-ranking-board");
 
         team_rankings.forEach(team => {

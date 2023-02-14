@@ -202,6 +202,11 @@ pub struct PointValues {
     pub dock: f64
 }
 
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+pub struct RankOptions {
+    pub comparison_teams: Option<Vec<FrcTeam>>
+}
+
 #[derive(Debug, Default, Clone, Serialize)]
 pub struct TeamRanking {
     pub team_number: u64,
@@ -214,8 +219,14 @@ pub struct TeamRanking {
     pub data_reliability_rating: f64
 }
 
+
+
+const MAX_SCORE_COLUMNS: f64 = 9.0;
+
+
 impl TeamRanking {
-    pub fn generate_rankings(teams: HashMap<u64, FrcTeam>) -> Vec<TeamRanking> {
+    // TODO: ADD COMBINING TEAMS TO RANKING
+    pub fn generate_rankings(teams: HashMap<u64, FrcTeam>, options: RankOptions) -> Vec<TeamRanking> {
         let mut maxCount = RankMaxCount::default();
         let mut rankings = Vec::new();
 
@@ -229,7 +240,7 @@ impl TeamRanking {
         };
 
         // TODO: Optimize to not iterate through all teams twice
-        for team in teams.values() {
+        for mut team in teams.values() {
             let team_summary = team.get_summary().as_ref().unwrap();
             if team_summary.avg_low > maxCount.low {
                 maxCount.low = team_summary.avg_low;
@@ -274,7 +285,7 @@ pub struct FrcTeam {
     version_id: u64,
     pub team_number: u64,
     match_data: Vec<MatchEntry>,
-    summary: Option<TeamSummary>,
+    pub summary: Option<TeamSummary>,
     tba_data: Option<HashMap<String, serde_json::Value>>
 }
 
@@ -289,6 +300,10 @@ impl FrcTeam {
 
     pub fn get_summary(&self) -> &Option<TeamSummary> {
         &self.summary
+    }
+
+    pub fn get_mut_summary(&mut self) -> &Option<TeamSummary> {
+        &mut self.summary
     }
 
     pub fn query_tba_data(&mut self, auth_key: &str) {
