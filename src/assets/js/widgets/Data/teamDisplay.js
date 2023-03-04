@@ -31,7 +31,7 @@ function fillRawTeamData(event) {
 
       teamEntry.innerHTML = `
               <div class="label">${team.team_number}</div>
-              <div class="team-name">${(team.tba_data.nickname) ? team.tba_data.nickname:"Team"} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
+              <div class="team-name">${(team.tba_data) ? team.tba_data.nickname:"Team"} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
               <table class="cone-table">
                 <caption><object class="caption-icon" data="./assets/svg/cone.svg" type=""></object></caption>
                 <tr>

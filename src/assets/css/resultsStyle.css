@@ -393,6 +393,20 @@ html {scroll-behavior: smooth;}
     margin-bottom: 5px;
 }
 
+td > .percentage-bar {
+    width: 50px !important;
+    height: 50px !important;
+    stroke-linecap: round;
+}
+.percentage-bar > .ldBar-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+}
+.station-text {
+    font-size: 12px;
+}
+
 .analysis-options-grid {
     display: flex;
     flex-direction: column;
@@ -408,6 +422,41 @@ html {scroll-behavior: smooth;}
     align-items: center;
     justify-content: flex-start;
     overflow-y: scroll;
+}
+
+.analysis-ranking-board > .analysis-ranking-option-bar {
+    width: 95%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 10px;
+    margin-top: 10px;
+    border-radius: 25px;
+    background-color: white;
+}
+
+.analysis-ranking-board > .rankings {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.analysis-ranking-option-bar > .comparison-team-option {
+    width: 100px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #F45C43;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: "Gilroy";
 }
 
 .analysis-rank-entry {
@@ -428,7 +477,7 @@ html {scroll-behavior: smooth;}
 .analysis-rank-entry > .id-data {
     flex-grow: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     margin-left: 10px;
@@ -440,6 +489,14 @@ html {scroll-behavior: smooth;}
     font-size: 44px;
     font-weight: bold;
     color: black;
+    width: 170px;
+}
+
+.id-data > .rank {
+    font-family: "Gilroy";
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
 }
 
 .analysis-rank-entry > .rate-data {
@@ -448,7 +505,21 @@ html {scroll-behavior: smooth;}
     align-items: center;
     justify-content: flex-end; 
     margin-right: 10px;
-    gap: 10px;
+    gap: 5px;
+}
+
+.rate-data > .rating-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.rating-group > .rating-label {
+    font-family: "Gilroy";
+    font-size: 12px;
+    font-weight: bold;
+    color: gray;
 }
 
 .rating-bar {

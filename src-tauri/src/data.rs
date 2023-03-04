@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, cmp};
 
 use reqwest::{header, Response, Error};
 use serde::{Serialize, Deserialize, de};
@@ -42,6 +42,18 @@ pub struct MatchEntry {
     auton_balance: BalanceState,
     #[serde(deserialize_with = "from_charge_station_int")]
     end_game_balance: BalanceState
+}
+
+impl MatchEntry {
+    pub fn constrain_values(&mut self) -> MatchEntry {
+        self.cone_low_count = self.cone_low_count.clamp(0, 9);
+        self.cone_med_count= self.cone_med_count.clamp(0, 6);
+        self.cone_high_count = self.cone_high_count.clamp(0, 6);
+        self.cube_low_count = self.cube_low_count.clamp(0, 9);
+        self.cube_med_count = self.cube_med_count.clamp(0, 3);
+        self.cube_high_count = self.cube_high_count.clamp(0, 3);
+        self.to_owned()
+    }
 }
 
 fn empty_tba_data() -> Option<String> {
@@ -166,6 +178,10 @@ impl TeamSummary {
 
         }
 
+        
+
+        
+
         TeamSummary { 
             team_number: team.team_number, 
             avg_cone_low: avg_count.avg_cone_low.iter().copied().sum::<u64>() as f64 / avg_count.avg_cone_low.len() as f64, 
@@ -182,6 +198,38 @@ impl TeamSummary {
             dock_percentage: avg_count.dock_count.iter().copied().sum::<u64>() as f64 /avg_count.dock_count.len() as f64 }
 
 
+    }
+    // Creates a combination of two teams into one summary
+    fn combine_teams(team1: &TeamSummary, team2: &TeamSummary) -> TeamSummary {
+        TeamSummary {
+            team_number: team1.team_number,
+            avg_cone_low: (team1.avg_cone_low + team2.avg_cone_low),
+            avg_cone_med: (team1.avg_cone_med + team2.avg_cone_med),
+            avg_cone_high: (team1.avg_cone_high + team2.avg_cone_high),
+            avg_cube_low: (team1.avg_cube_low + team2.avg_cube_low),
+            avg_cube_med: (team1.avg_cube_med + team2.avg_cube_med),
+            avg_cube_high: (team1.avg_cube_high + team2.avg_cube_high),
+            avg_low: (team1.avg_low + team2.avg_low),
+            avg_med: (team1.avg_med + team2.avg_med),
+            avg_high: (team1.avg_high + team2.avg_high),
+            can_balance: team1.can_balance || team2.can_balance,
+            balance_percentage: f64::max(team1.balance_percentage, team2.balance_percentage),
+            dock_percentage: f64::max(team1.dock_percentage, team2.dock_percentage)
+        }
+    }
+    pub fn constrain_values(&mut self) -> Self {
+        self.avg_cone_low = self.avg_cone_low.clamp(0.0, 9.0);
+        self.avg_cone_med = self.avg_cone_med.clamp(0.0, 6.0);
+        self.avg_cone_high = self.avg_cone_high.clamp(0.0, 6.0);
+        self.avg_cube_low = self.avg_cube_low.clamp(0.0, 9.0);
+        self.avg_cube_med = self.avg_cube_med.clamp(0.0, 3.0);
+        self.avg_cube_high = self.avg_cube_high.clamp(0.0, 3.0);
+        self.avg_low = (self.avg_cone_low+self.avg_cube_low).clamp(0.0, 9.0);
+        self.avg_med = (self.avg_cone_med+self.avg_cube_med).clamp(0.0, 9.0);
+        self.avg_high = (self.avg_cone_high+self.avg_cube_high).clamp(0.0, 9.0);
+        self.dock_percentage = self.dock_percentage.clamp(0.0, 1.0);
+        self.balance_percentage = self.balance_percentage.clamp(0.0, 1.0-self.dock_percentage);
+        self.to_owned()
     }
 }
 
@@ -204,7 +252,7 @@ pub struct PointValues {
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RankOptions {
-    pub comparison_teams: Option<Vec<FrcTeam>>
+    pub comparison_team: Option<FrcTeam>
 }
 
 #[derive(Debug, Default, Clone, Serialize)]
@@ -225,10 +273,15 @@ const MAX_SCORE_COLUMNS: f64 = 9.0;
 
 
 impl TeamRanking {
-    // TODO: ADD COMBINING TEAMS TO RANKING
     pub fn generate_rankings(teams: HashMap<u64, FrcTeam>, options: RankOptions) -> Vec<TeamRanking> {
         let mut maxCount = RankMaxCount::default();
         let mut rankings = Vec::new();
+        let mut comparison_team: FrcTeam;
+        if options.comparison_team.is_none() { // Comparison Team is the team that is being added to each team to get the rating as if two teams were together
+            comparison_team = FrcTeam::default();
+        } else {
+            comparison_team = options.comparison_team.unwrap();
+        }
 
         // TODO: Make these better to configure
         let point_values = PointValues {
@@ -241,7 +294,13 @@ impl TeamRanking {
 
         // TODO: Optimize to not iterate through all teams twice
         for mut team in teams.values() {
-            let team_summary = team.get_summary().as_ref().unwrap();
+            if (comparison_team.team_number == team.team_number) {
+                continue;
+            }
+            if (comparison_team.get_summary().is_none()) {
+                comparison_team.summary = Some(TeamSummary::default());
+            }  // Stupid hack to make sure comparison team has a summary
+            let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap()).constrain_values();
             if team_summary.avg_low > maxCount.low {
                 maxCount.low = team_summary.avg_low;
             }
@@ -262,7 +321,10 @@ impl TeamRanking {
         let totalPoints = (maxCount.low*point_values.low + maxCount.medium*point_values.medium + maxCount.high*point_values.high + maxCount.balance*point_values.balance + maxCount.dock*point_values.dock);
 
         for team in teams.values() {
-            let team_summary = team.get_summary().as_ref().unwrap();
+            if (comparison_team.team_number == team.team_number) {
+                continue;
+            }
+            let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap()).constrain_values();
             let mut ranking = TeamRanking::default();
             ranking.team_number = team.team_number;
             ranking.low_rating = team_summary.avg_low / maxCount.low;
@@ -295,7 +357,7 @@ impl FrcTeam {
     }
 
     pub fn generate_summary(&mut self) {
-        self.summary = Some(TeamSummary::new(&self));
+        self.summary = Some(TeamSummary::new(&self).constrain_values());
     }
 
     pub fn get_summary(&self) -> &Option<TeamSummary> {
@@ -313,8 +375,8 @@ impl FrcTeam {
         };
     }
 
-    pub fn add_match_entry(&mut self, entry: MatchEntry) {
-        self.match_data.push(entry);
+    pub fn add_match_entry(&mut self, mut entry: MatchEntry) {
+        self.match_data.push(entry.constrain_values());
     }
 }
 

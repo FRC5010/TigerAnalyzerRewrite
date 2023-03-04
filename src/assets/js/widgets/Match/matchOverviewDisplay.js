@@ -1,4 +1,12 @@
 
+
+function getValueStroke(value) {
+  if (value < 30) return "red";
+  else if (value < 60) return "orange";
+  else if (value < 90) return "lightgreen";
+  else return "limegreen";
+}
+
 function updateTeamCard(event, data) {
     let teamCard = document.getElementById(event.srcElement.dataset.cardId);
     let teamNumber = event.srcElement.value;
@@ -10,7 +18,7 @@ function updateTeamCard(event, data) {
     
     teamCard.innerHTML = `
     <div class="label">${team.team_number}</div>
-                  <div class="team-name">${(team.tba_data.nickname) ? team.tba_data.nickname:"Team"} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
+                  <div class="team-name">${(team.tba_data) ? team.tba_data.nickname:"Team"} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
                   <div class="cones-row">
                   <object class="caption-icon" data="./assets/svg/cone.svg" type=""></object>
                     <table class="cone-table">
@@ -41,20 +49,23 @@ function updateTeamCard(event, data) {
                       </tr>
                     </table>
                   </div>
-              <!-- NOT IMPLEMENTED
+
               <table class="station-table">
                 <tr>
-                  <th>Balance</th>
-                  <th>Docked %</th>
-                  <th>Engaged %</th>
+                  <th class="station-text">Balance</th>
+                  <th class="station-text">Dock %</th>
+                  <th class="station-text">Engage %</th>
                 </tr>
                 <tr>
-                  <td>None</td>
-                  <td>None</td>
-                  <td>None</td>
+                  <td style="text-align:center;">${team.summary.can_balance.toString().toUpperCase()}</td>
+                  <td><div class="percentage-bar ldBar label-center"></div></td>
+                  <td><div class="percentage-bar ldBar label-center"></div></td>
                 </tr>
-              </table> -->
-    `
+              </table>`
+              
+    let percentageBars = teamCard.getElementsByClassName("percentage-bar");
+    new ldBar(percentageBars[0], { "value": Math.round(team.summary.balance_percentage*100), "stroke": "white", "preset": "circle"});
+    new ldBar(percentageBars[1], { "value": Math.round(team.summary.dock_percentage*100), "stroke": "white", "preset": "circle"});
 
  }
 
@@ -62,7 +73,7 @@ function initializeMatchOverview(event) {
     let data = event.detail.scout_data;
     let teamNumbers = Object.keys(data);
 
-    let teamOptionsHtml = "<select class='team-select'><option value='' selected disabled hidden>Team</option></select>"
+    let teamOptionsHtml = "<option value='' selected disabled hidden>Team</option>"
     teamNumbers.forEach(teamNumber => {
         
         

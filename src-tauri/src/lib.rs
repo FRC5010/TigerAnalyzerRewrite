@@ -28,6 +28,7 @@ fn read_scout_data(data_path: &str) -> Result<HashMap<u64, FrcTeam>, Box<dyn Err
     let mut team_list: HashMap<u64, FrcTeam> = HashMap::new();
     let mut csv_data = csv::Reader::from_path(data_path)?;
     for entry in csv_data.deserialize() {
+        println!("Entry: {:?}", entry);
         let match_entry: MatchEntry = entry?;
         if !team_list.contains_key(&match_entry.team_number) {
             team_list.insert(match_entry.team_number, FrcTeam::new(match_entry.team_number));
@@ -62,8 +63,12 @@ fn submit_data(handle: tauri::AppHandle, data_path: &str) -> HashMap<u64, FrcTea
 }
 
 #[tauri::command]
-fn export_file(handle: tauri::AppHandle) {
+fn export_file(handle: tauri::AppHandle, data: HashMap<u64, FrcTeam>) {
   let mut workbook = Workbook::new();
+
+  let raw_data_worksheet = workbook.add_worksheet();
+
+
   
 }
 
