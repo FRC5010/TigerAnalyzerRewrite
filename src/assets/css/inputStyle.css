@@ -12,7 +12,7 @@
     width: 100%;
     text-align: center;
     overflow: hidden;
-    background-color: red;
+    background-color: rgb(255, 255, 255);
 }
 
 .container {
@@ -33,7 +33,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: white;
+    background-color: rgb(250, 252, 249);
     gap: 0px;
 }
 
@@ -48,9 +48,9 @@
     font-family:"Gilroy-Bold";
     text-align: center;
     margin-top: 0px;
-    background: -webkit-linear-gradient(top left, #FF6900, #ff0151);
-    background: -moz-linear-gradient(top left, #FF6900, #ff0151);
-    background: linear-gradient(to bottom right, #FF6900, #ff0151);
+    background: -webkit-linear-gradient(top left, #0d8dad, #0d8dad);
+    background: -moz-linear-gradient(top left, #0d8dad, #0d8dad);
+    background: linear-gradient(to bottom right, #0d8dad, #0d8dad);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 2px 2px 2px rgba(255, 255, 255, 0.15);
@@ -63,9 +63,9 @@
     text-align: center;
     margin-bottom: 0px;
     margin-top: 0px;
-    background: -webkit-linear-gradient(top left, #FF6900, #ff0151);
-    background: -moz-linear-gradient(top left, #FF6900, #ff0151);
-    background: linear-gradient(to bottom right, #FF6900, #ff0151);
+    background: -webkit-linear-gradient(top left, #0d8dad, #0d8dad);
+    background: -moz-linear-gradient(top left, #0d8dad, #0d8dad);
+    background: linear-gradient(to bottom right, #0d8dad, #0d8dad);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 2px 2px 2px rgba(255, 255, 255, 0.15);
@@ -73,7 +73,7 @@
 }
 
 .title .top {
-    color: orange;
+    color: rgb(0, 255, 251);
     font-size: 48px;
 }
 
@@ -94,8 +94,8 @@
 
 .dataSelectBtn, .submitBtn {
     height: 70px;
-    background-color: #FF6900;
-    box-shadow: inset 0px 0px 0px rgb(255, 255, 255);
+    background-color: #0011ff;
+    box-shadow: inset 0px 0px 0px rgb(48, 254, 1);
     border: none;
     font-size: 20px;
     font-family: "Gilroy-Bold";
@@ -107,15 +107,15 @@
 }
 
 .dataSelectBtn {
-    background: -webkit-linear-gradient(top left, #FF6900, #ff1601);
-    background: -moz-linear-gradient(top left, #FF6900, #ff1601);
-    background: linear-gradient(to bottom right, #FF6900, #ff1601);
+    background: -webkit-linear-gradient(top left, #0d8dad, #0d8dad);
+    background: -moz-linear-gradient(top left, #0d8dad, #0d8dad);
+    background: linear-gradient(to bottom right, #0d8dad, #0d8dad);
 }
 
 .submitBtn {
-    background: -webkit-linear-gradient(top left, #FF6900, #ff0151);
-    background: -moz-linear-gradient(top left, #FF6900, #ff0151);
-    background: linear-gradient(to bottom right, #FF6900, #ff0151);
+    background: -webkit-linear-gradient(top left, #0d8dad, #0d8dad);
+    background: -moz-linear-gradient(top left, #0d8dad, #0d8dad);
+    background: linear-gradient(to bottom right, #0d8dad, #0d8dad);
 }
 
 .buttons {

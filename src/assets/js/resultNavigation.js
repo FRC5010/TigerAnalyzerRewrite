@@ -11,6 +11,7 @@ const dialog = window.__TAURI__.dialog;
 function navGrids(event) {
     let navItems = document.querySelector(".navbar").getElementsByClassName("nav-item");
     let grids = document.querySelector(".grids").getElementsByClassName("grid-container");
+    //  Whenever a button on the Nav bar is clicked, it hides every screen except for the selected button.
 
     Array.from(grids).forEach(grid => {
         grid.classList.add("inactive");
@@ -45,6 +46,8 @@ function navGridGroups(event) {
         dot.classList.remove("active");
         dot.classList.add("inactive");
     });
+
+   //Commented out code - may be useful to be repeated for the export button. *Recheck 1/30* (Affects the navigation bar buttons) - the screen is activated and hides everything else
     Array.from(gridGroups).forEach(group => {
         group.classList.remove("active");
         group.classList.add("inactive");

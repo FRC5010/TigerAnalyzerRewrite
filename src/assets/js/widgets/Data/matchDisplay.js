@@ -12,7 +12,7 @@ function fillRawMatchData(event) {
   teams.forEach(team => {
     let label = document.createElement("div");
     label.classList.add("label");
-    label.textContent = team.team_number;
+    label.textContent = team.teamNumber;
     document.querySelector(".data-match-raw-display").appendChild(label);
     team.match_data.forEach(match => {
       let entry = document.createElement("div");

@@ -1,11 +1,11 @@
 use std::{collections::HashMap, cmp};
-
+use std::str::FromStr;
 use reqwest::{header, Response, Error};
 use serde::{Serialize, Deserialize, de};
 
 
 #[derive(Default, Debug, Serialize, Deserialize, Clone)]
-enum BalanceState {
+enum ClimbState {
     #[default]
     OffPlatform,
     OnPlatform,
@@ -21,45 +21,70 @@ enum MatchType {
     Final,
 }
 
+/* Definition of MatchEntry record.  Based upon CSV file headers. */
 #[derive(Default, Debug, Serialize, Deserialize, Clone)]
 pub struct MatchEntry {
-    pub date: u64,
-    #[serde(deserialize_with = "from_match_type_string")]
-    match_type: MatchType,
-    pub team_number: u64,
-    #[serde(default = "empty_tba_data")]
-    pub tba_match_data: Option<String>,
+   // #[serde(deserialize_with = "from_match_type_string")]
+    //match_type: MatchType,
+    //#[serde(default = "empty_tba_data")]
+    //pub tba_match_data: Option<String>,
+
+    // Game(2024) settings.
+    pub teamNumber: u64,
     pub alliance: String,
-    pub cone_low_count: u64,
-    pub cone_med_count: u64,
-    pub cone_high_count: u64,
-    pub cube_low_count: u64,
-    pub cube_med_count: u64,
-    pub cube_high_count: u64,
-    #[serde(deserialize_with = "from_bool_string")]
-    pub floor_pickup: bool,
-    #[serde(deserialize_with = "from_charge_station_int")]
-    auton_balance: BalanceState,
-    #[serde(deserialize_with = "from_charge_station_int")]
-    end_game_balance: BalanceState
+    pub startTime: String,
+    pub autoamp: u64,
+    pub autospeaker: u64,
+    pub teleopamp: u64,
+    pub teleopspeaker: u64,
+    pub teleoptrap: u64,
+    pub subwoofer: u64,
+    #[serde(deserialize_with = "from_climbtime_string")]
+    pub climbtime: u64
+    //#[serde(deserialize_with = "from_charge_station_int")]
+    //end_game_climb: ClimbState
+
+    //#[serde(deserialize_with = "from_bool_string")]
+    //pub floor_pickup: bool,
+    //#[serde(deserialize_with = "from_charge_station_int")]
+    //auton_climb: ClimbState,
 }
 
 impl MatchEntry {
     pub fn constrain_values(&mut self) -> MatchEntry {
-        self.cone_low_count = self.cone_low_count.clamp(0, 9);
-        self.cone_med_count= self.cone_med_count.clamp(0, 6);
-        self.cone_high_count = self.cone_high_count.clamp(0, 6);
-        self.cube_low_count = self.cube_low_count.clamp(0, 9);
-        self.cube_med_count = self.cube_med_count.clamp(0, 3);
-        self.cube_high_count = self.cube_high_count.clamp(0, 3);
+        // Game(2024) settings.
+        self.autoamp = self.autoamp.clamp(0, 5);
+        self.autospeaker = self.autospeaker.clamp(0, 5);
+        self.teleopamp = self.teleopamp.clamp(0, 20);
+        self.teleopspeaker = self.teleopspeaker.clamp(0, 20);
+        self.teleoptrap = self.teleoptrap.clamp(0, 3);
+        self.subwoofer = self.subwoofer.clamp(0, 20);
         self.to_owned()
     }
 }
 
+fn from_climbtime_string<'de, D>(
+    deserializer: D,
+) -> Result<u64, D::Error>
+where 
+    D: de::Deserializer<'de>,
+{
+    let s: &str =
+        de::Deserialize::deserialize(deserializer).unwrap_or("0");
+    
+    match s {
+        "undefined" => Ok(0),
+        _ => Ok(u64::from_str(s).unwrap())
+    }
+}
+
+/*** 2023 Game remnant.  Leaving for example.
 fn empty_tba_data() -> Option<String> {
     None
 }
+***/
 
+/*** 2023 Game remnant.  Leaving for example.
 fn from_bool_string<'de, D>(
     deserializer: D,
 ) -> Result<bool, D::Error>
@@ -76,26 +101,30 @@ where
         
     }
 }
+***/
 
+/*** 2023 Game remnant. Leaving for example.
 fn from_charge_station_int<'de, D>(
     deserializer: D,
-) -> Result<BalanceState, D::Error>
+) -> Result<ClimbState, D::Error>
 where 
     D: de::Deserializer<'de>,
 {
     let num: &str = 
         de::Deserialize::deserialize(deserializer)?;
     match num {
-        "0" => Ok(BalanceState::OffPlatform),
-        "OffPlatform" => Ok(BalanceState::OffPlatform),
-        "1" => Ok(BalanceState::OnPlatform),
-        "OnPlatform" => Ok(BalanceState::OnPlatform),
-        "2" => Ok(BalanceState::OnDocked),
-        "OnDocked" => Ok(BalanceState::OnDocked),
-        _ => Err(de::Error::custom("Not a valid Balance Status"))
+        "0" => Ok(ClimbState::OffPlatform),
+        "OffPlatform" => Ok(ClimbState::OffPlatform),
+        "1" => Ok(ClimbState::OnPlatform),
+        "OnPlatform" => Ok(ClimbState::OnPlatform),
+        "2" => Ok(ClimbState::OnDocked),
+        "OnDocked" => Ok(ClimbState::OnDocked),
+        _ => Err(de::Error::custom("Not a valid Climb Status"))
     }
 }
+***/
 
+/*** 2023 Game remnant. Leaving for example.
 fn from_match_type_string<'de, D>(
     deserializer: D,
 ) -> Result<MatchType, D::Error>
@@ -109,39 +138,48 @@ where
         _ => Ok(MatchType::Friendly),
     }
 }
+***/
 
-
+/* Team Summary.  Based upon summarization of team MatchEntry items. */
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct TeamSummary {
-    pub team_number: u64,
-    pub avg_cone_low: f64,
-    pub avg_cone_med: f64,
-    pub avg_cone_high: f64,
-    pub avg_cube_low: f64,
-    pub avg_cube_med: f64,
-    pub avg_cube_high: f64,
-    pub avg_low: f64,
-    pub avg_med: f64,
-    pub avg_high: f64,
-    pub can_balance: bool,
-    pub balance_percentage: f64,
+    pub teamNumber: u64,
+    pub total_speaker: f64,
+    pub speaker_amplified: f64,
+    pub speaker_unamplified: f64,
+    pub total_amp: f64,
+    pub amp_amplified: f64,
+    pub amp_unamplified: f64,
+    pub auton_amp: f64,
+    pub auton_speaker: f64,
+    pub points_trap: f64,
+    pub climb_count: f64,
+    pub climb_percentage: f64,
     pub dock_percentage: f64
 }
 
-// UNSURE OF IMPLEMENTATION FOR AVERAGING
+/* Team Summary Averages.  Populated based upon summarization of team MatchEntry items. **/
 struct  TeamSummaryAvgCounter {
-    avg_cone_low: Vec<u64>,
-    avg_cone_med: Vec<u64>,
-    avg_cone_high: Vec<u64>,
-    avg_cube_low: Vec<u64>,
-    avg_cube_med: Vec<u64>,
-    avg_cube_high: Vec<u64>,
-    balance_count: Vec<u64>,
+    total_speaker: Vec<u64>,
+    speaker_amplified: Vec<u64>,
+    speaker_unamplified: Vec<u64>,
+    total_amp: Vec<u64>,
+    amp_amplified: Vec<u64>,
+    amp_unamplified: Vec<u64>,
+    auton_amp: Vec<u64>,
+    auton_speaker: Vec<u64>,
+    points_trap: Vec<u64>,
+    climb_count: Vec<u64>,
+    climb_percentage: Vec<f64>,
     dock_count: Vec<u64>
 }
+
 impl TeamSummaryAvgCounter {
     pub fn new() -> TeamSummaryAvgCounter {
-        TeamSummaryAvgCounter { avg_cone_low: Vec::new(), avg_cone_med: Vec::new(), avg_cone_high: Vec::new(), avg_cube_low: Vec::new(), avg_cube_med: Vec::new(), avg_cube_high: Vec::new(), balance_count: Vec::new(), dock_count: Vec::new() }
+        TeamSummaryAvgCounter { total_speaker: Vec::new(), speaker_amplified: Vec::new(), speaker_unamplified: Vec::new(),  total_amp: Vec::new(), amp_amplified: Vec::new(), amp_unamplified: Vec::new(),
+            auton_amp: Vec::new(), auton_speaker: Vec::new(), 
+            points_trap: Vec::new(), climb_count: Vec::new(), climb_percentage: Vec::new(), dock_count: Vec::new()
+        }
     }
 }
 
@@ -149,104 +187,102 @@ impl TeamSummaryAvgCounter {
 impl TeamSummary {
     pub fn new(team: &FrcTeam) -> TeamSummary {
         let mut avg_count = TeamSummaryAvgCounter::new();
-        let mut balance_flag = false;
+        let mut climb_count = 0;
         for match_entry in &team.match_data {
-            avg_count.avg_cone_low.push(match_entry.cone_low_count);
-            avg_count.avg_cone_med.push(match_entry.cone_med_count);
-            avg_count.avg_cone_high.push(match_entry.cone_high_count);
-            avg_count.avg_cube_low.push(match_entry.cube_low_count);
-            avg_count.avg_cube_med.push(match_entry.cube_med_count);
-            avg_count.avg_cube_high.push(match_entry.cube_high_count);
-            match match_entry.end_game_balance {
-                BalanceState::OffPlatform => {
-                    avg_count.balance_count.push(0);
-                    avg_count.dock_count.push(0);
-                }
-                
-                BalanceState::OnDocked => {
-                    avg_count.balance_count.push(0);
-                    avg_count.dock_count.push(1);
-                    balance_flag = true;
-                }
-                
-                BalanceState::OnPlatform => {
-                    avg_count.balance_count.push(1);
-                    avg_count.dock_count.push(0);
-                    balance_flag = true;
-                }
+            avg_count.total_speaker.push(match_entry.teleopspeaker);
+            avg_count.speaker_amplified.push(match_entry.teleopspeaker);
+            avg_count.speaker_unamplified.push(match_entry.teleopspeaker);
+            avg_count.total_amp.push(match_entry.teleopamp);
+            avg_count.points_trap.push(match_entry.teleoptrap);
+            if match_entry.climbtime > 0 { 
+                avg_count.climb_count.push(1);
+            } else {
+                avg_count.climb_count.push(0);
             }
-
+            
+           /*  match match_entry.end_game_climb {
+                ClimbState::OffPlatform => {
+                    avg_count.climb_count.push(0);
+                    avg_count.dock_count.push(0);
+                }
+                
+                ClimbState::OnDocked => {
+                    avg_count.climb_count.push(0);
+                    avg_count.dock_count.push(1);
+                }
+                
+                ClimbState::OnPlatform => {
+                    avg_count.climb_count.push(1);
+                    avg_count.dock_count.push(0);
+                }
+            }*/
+            
         }
 
-        
-
-        
-
+        // TeamSummary object initializer.  Divide TeamSummaryAvgCounter fields by length of each fields array.
         TeamSummary { 
-            team_number: team.team_number, 
-            avg_cone_low: avg_count.avg_cone_low.iter().copied().sum::<u64>() as f64 / avg_count.avg_cone_low.len() as f64, 
-            avg_cone_med: avg_count.avg_cone_med.iter().copied().sum::<u64>() as f64 /avg_count.avg_cone_med.len() as f64, 
-            avg_cone_high: avg_count.avg_cone_high.iter().copied().sum::<u64>() as f64 /avg_count.avg_cone_high.len() as f64, 
-            avg_cube_low: avg_count.avg_cube_low.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_low.len() as f64, 
-            avg_cube_med: avg_count.avg_cube_med.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_med.len() as f64,  
-            avg_cube_high: avg_count.avg_cube_high.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_high.len() as f64,
-            avg_low: avg_count.avg_cone_low.iter().copied().sum::<u64>() as f64 / avg_count.avg_cone_low.len() as f64 + avg_count.avg_cube_low.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_low.len() as f64,
-            can_balance: balance_flag,
-            avg_med: avg_count.avg_cone_med.iter().copied().sum::<u64>() as f64 /avg_count.avg_cone_med.len() as f64 + avg_count.avg_cube_med.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_med.len() as f64,
-            avg_high: avg_count.avg_cone_high.iter().copied().sum::<u64>() as f64 /avg_count.avg_cone_high.len() as f64 + avg_count.avg_cube_high.iter().copied().sum::<u64>() as f64 /avg_count.avg_cube_high.len() as f64,
-            balance_percentage: 0.0 + avg_count.balance_count.iter().copied().sum::<u64>() as f64 /avg_count.balance_count.len() as f64, 
-            dock_percentage: avg_count.dock_count.iter().copied().sum::<u64>() as f64 /avg_count.dock_count.len() as f64 }
-
-
+            teamNumber: team.teamNumber, 
+            total_speaker: avg_count.total_speaker.iter().copied().sum::<u64>() as f64 / avg_count.total_speaker.len() as f64, 
+            speaker_amplified: avg_count.speaker_amplified.iter().copied().sum::<u64>() as f64 / avg_count.speaker_amplified.len() as f64, 
+            speaker_unamplified: avg_count.speaker_unamplified.iter().copied().sum::<u64>() as f64 / avg_count.speaker_unamplified.len() as f64, 
+            total_amp: avg_count.total_amp.iter().copied().sum::<u64>() as f64 / avg_count.total_amp.len() as f64, 
+            amp_amplified: avg_count.amp_amplified.iter().copied().sum::<u64>() as f64 / avg_count.total_amp.len() as f64,
+            amp_unamplified: avg_count.amp_unamplified.iter().copied().sum::<u64>() as f64 / avg_count.total_amp.len() as f64,
+            auton_amp: avg_count.auton_amp.iter().copied().sum::<u64>() as f64 / avg_count.total_amp.len() as f64,
+            auton_speaker: avg_count.auton_speaker.iter().copied().sum::<u64>() as f64 / avg_count.total_speaker.len() as f64,
+            points_trap: avg_count.points_trap.iter().copied().sum::<u64>() as f64 / avg_count.points_trap.len() as f64,  
+            climb_count: avg_count.climb_count.iter().copied().sum::<u64>() as f64,
+            climb_percentage: (avg_count.climb_count.iter().copied().sum::<u64>() as f64 / avg_count.climb_count.len() as f64),
+            dock_percentage: avg_count.dock_count.iter().copied().sum::<u64>() as f64 / avg_count.dock_count.len() as f64,
+        }
     }
-    // Creates a combination of two teams into one summary
+
+    // Creates a combination of two teams into one summary.
     fn combine_teams(team1: &TeamSummary, team2: &TeamSummary) -> TeamSummary {
         TeamSummary {
-            team_number: team1.team_number,
-            avg_cone_low: (team1.avg_cone_low + team2.avg_cone_low),
-            avg_cone_med: (team1.avg_cone_med + team2.avg_cone_med),
-            avg_cone_high: (team1.avg_cone_high + team2.avg_cone_high),
-            avg_cube_low: (team1.avg_cube_low + team2.avg_cube_low),
-            avg_cube_med: (team1.avg_cube_med + team2.avg_cube_med),
-            avg_cube_high: (team1.avg_cube_high + team2.avg_cube_high),
-            avg_low: (team1.avg_low + team2.avg_low),
-            avg_med: (team1.avg_med + team2.avg_med),
-            avg_high: (team1.avg_high + team2.avg_high),
-            can_balance: team1.can_balance || team2.can_balance,
-            balance_percentage: f64::max(team1.balance_percentage, team2.balance_percentage),
+            teamNumber: team1.teamNumber,
+            total_speaker: (team1.total_speaker + team2.total_speaker),
+            speaker_amplified: (team1.speaker_amplified + team2.speaker_amplified),
+            speaker_unamplified: (team1.speaker_unamplified + team2.speaker_unamplified),
+            total_amp: (team1.total_amp + team2.total_amp),
+            amp_amplified: (team1.amp_amplified + team2.amp_amplified),
+            amp_unamplified: (team1.amp_unamplified + team2.amp_unamplified),
+            auton_amp: (team1.auton_amp + team2.auton_amp),
+            auton_speaker: (team1.auton_speaker + team2.auton_speaker),
+            points_trap: (team1.points_trap + team2.points_trap),
+            climb_count: team1.climb_count + team2.climb_count,
+            climb_percentage: f64::max(team1.climb_percentage, team2.climb_percentage),
             dock_percentage: f64::max(team1.dock_percentage, team2.dock_percentage)
         }
     }
     pub fn constrain_values(&mut self) -> Self {
-        self.avg_cone_low = self.avg_cone_low.clamp(0.0, 9.0);
-        self.avg_cone_med = self.avg_cone_med.clamp(0.0, 6.0);
-        self.avg_cone_high = self.avg_cone_high.clamp(0.0, 6.0);
-        self.avg_cube_low = self.avg_cube_low.clamp(0.0, 9.0);
-        self.avg_cube_med = self.avg_cube_med.clamp(0.0, 3.0);
-        self.avg_cube_high = self.avg_cube_high.clamp(0.0, 3.0);
-        self.avg_low = (self.avg_cone_low+self.avg_cube_low).clamp(0.0, 9.0);
-        self.avg_med = (self.avg_cone_med+self.avg_cube_med).clamp(0.0, 9.0);
-        self.avg_high = (self.avg_cone_high+self.avg_cube_high).clamp(0.0, 9.0);
+        self.total_speaker = self.total_speaker.clamp(0.0, 9.0);
+        self.speaker_amplified = self.speaker_amplified.clamp(0.0, 6.0);
+        self.speaker_unamplified = self.speaker_unamplified.clamp(0.0, 6.0);
+        self.total_amp = self.total_amp.clamp(0.0, 9.0);
+        self.points_trap = self.points_trap.clamp(0.0, 3.0);
+        self.climb_count = self.climb_count.clamp(0.0, 1.0);
         self.dock_percentage = self.dock_percentage.clamp(0.0, 1.0);
-        self.balance_percentage = self.balance_percentage.clamp(0.0, 1.0-self.dock_percentage);
         self.to_owned()
     }
 }
 
 #[derive(Debug, Default, Clone, Serialize)]
+//TODO update for 2024 game
 pub struct RankMaxCount {
     pub low: f64,
     pub medium: f64,
     pub high: f64,
-    pub balance: f64,
+    pub climb: f64,
     pub dock: f64
 }
 
+// TODO update for 2024 game
 pub struct PointValues {
     pub low: f64,
     pub medium: f64,
     pub high: f64,
-    pub balance: f64,
+    pub climb: f64,
     pub dock: f64
 }
 
@@ -255,26 +291,23 @@ pub struct RankOptions {
     pub comparison_team: Option<FrcTeam>
 }
 
+// TODO update for 2024 game
 #[derive(Debug, Default, Clone, Serialize)]
 pub struct TeamRanking {
-    pub team_number: u64,
+    pub teamNumber: u64,
     pub overall_rating: f64,
     pub low_rating: f64,
     pub medium_rating: f64,
     pub high_rating: f64,
-    pub balance_rating: f64,
+    pub climb_rating: f64,
     pub dock_rating: f64,
     pub data_reliability_rating: f64
 }
 
 
-
-const MAX_SCORE_COLUMNS: f64 = 9.0;
-
-
 impl TeamRanking {
     pub fn generate_rankings(teams: HashMap<u64, FrcTeam>, options: RankOptions) -> Vec<TeamRanking> {
-        let mut maxCount = RankMaxCount::default();
+        let mut max_rank_count = RankMaxCount::default();
         let mut rankings = Vec::new();
         let mut comparison_team: FrcTeam;
         if options.comparison_team.is_none() { // Comparison Team is the team that is being added to each team to get the rating as if two teams were together
@@ -288,52 +321,53 @@ impl TeamRanking {
             low: 2.0,
             medium: 3.0,
             high: 5.0,
-            balance: 6.0, // This is the remainder of Dock so its not in the total_points
+            climb: 6.0, // This is the remainder of Dock so its not in the total_points
             dock: 10.0
         };
 
         // TODO: Optimize to not iterate through all teams twice
         for mut team in teams.values() {
-            if (comparison_team.team_number == team.team_number) {
+            if (comparison_team.teamNumber == team.teamNumber) {
                 continue;
             }
             if (comparison_team.get_summary().is_none()) {
                 comparison_team.summary = Some(TeamSummary::default());
             }  // Stupid hack to make sure comparison team has a summary
             let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap()).constrain_values();
-            if team_summary.avg_low > maxCount.low {
-                maxCount.low = team_summary.avg_low;
-            }
-            if team_summary.avg_med > maxCount.medium {
-                maxCount.medium = team_summary.avg_med;
-            }
-            if team_summary.avg_high > maxCount.high {
-                maxCount.high = team_summary.avg_high;
-            }
-            if team_summary.balance_percentage > maxCount.balance {
-                maxCount.balance = team_summary.balance_percentage;
-            }
-            if team_summary.dock_percentage > maxCount.dock {
-                maxCount.dock = team_summary.dock_percentage;
+            
+            //if team_summary.avg_low > max_rank_count.low {
+            //    max_rank_count.low = team_summary.avg_low;
+            //}
+            //if team_summary.avg_med > max_rank_count.medium {
+            //    max_rank_count.medium = team_summary.avg_med;
+            //}
+            //if team_summary.avg_high > max_rank_count.high {
+            //    max_rank_count.high = team_summary.avg_high;
+            //}
+            //if team_summary.balance_percentage > max_rank_count.balance {
+            //    max_rank_count.balance = team_summary.balance_percentage;
+            //}
+            if team_summary.dock_percentage > max_rank_count.dock {
+                max_rank_count.dock = team_summary.dock_percentage;
             }
         };
 
-        let totalPoints = (maxCount.low*point_values.low + maxCount.medium*point_values.medium + maxCount.high*point_values.high + maxCount.balance*point_values.balance + maxCount.dock*point_values.dock);
+        let total_points_scored = (max_rank_count.low*point_values.low + max_rank_count.medium*point_values.medium + max_rank_count.high*point_values.high + max_rank_count.climb*point_values.climb + max_rank_count.dock*point_values.dock);
 
         for team in teams.values() {
-            if (comparison_team.team_number == team.team_number) {
+            if comparison_team.teamNumber == team.teamNumber {
                 continue;
             }
             let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap()).constrain_values();
             let mut ranking = TeamRanking::default();
-            ranking.team_number = team.team_number;
-            ranking.low_rating = team_summary.avg_low / maxCount.low;
-            ranking.medium_rating = team_summary.avg_med / maxCount.medium;
-            ranking.high_rating = team_summary.avg_high / maxCount.high;
-            ranking.balance_rating = team_summary.balance_percentage / maxCount.balance;
-            ranking.dock_rating = team_summary.dock_percentage / maxCount.dock;
+            ranking.teamNumber = team.teamNumber;
+            //ranking.low_rating = team_summary.avg_low / max_rank_count.low;
+            //ranking.medium_rating = team_summary.avg_med / max_rank_count.medium;
+            //ranking.high_rating = team_summary.avg_high / max_rank_count.high;
+            //ranking.balance_rating = team_summary.balance_percentage / max_rank_count.balance;
+            ranking.dock_rating = team_summary.dock_percentage / max_rank_count.dock;
             ranking.data_reliability_rating = 1.0;
-            ranking.overall_rating = (team_summary.avg_low*point_values.low + team_summary.avg_med*point_values.medium + team_summary.avg_high*point_values.high + team_summary.balance_percentage*point_values.balance + team_summary.dock_percentage*point_values.dock)/totalPoints;
+            //ranking.overall_rating = (team_summary.avg_low*point_values.low + team_summary.avg_med*point_values.medium + team_summary.avg_high*point_values.high + team_summary.balance_percentage*point_values.balance + team_summary.dock_percentage*point_values.dock)/total_points_scored;
             rankings.push(ranking);
         };
         rankings
@@ -345,15 +379,15 @@ impl TeamRanking {
 #[derive(Debug, Default, Clone , Serialize, Deserialize)]
 pub struct FrcTeam {
     version_id: u64,
-    pub team_number: u64,
+    pub teamNumber: u64,
     match_data: Vec<MatchEntry>,
     pub summary: Option<TeamSummary>,
     tba_data: Option<HashMap<String, serde_json::Value>>
 }
 
 impl FrcTeam {
-    pub fn new(team_number: u64) -> FrcTeam {
-        FrcTeam { version_id: 1, team_number: team_number, match_data: Vec::new(), summary: None, tba_data: None} 
+    pub fn new(teamNumber: u64) -> FrcTeam {
+        FrcTeam { version_id: 1, teamNumber: teamNumber, match_data: Vec::new(), summary: None, tba_data: None} 
     }
 
     pub fn generate_summary(&mut self) {
@@ -364,12 +398,14 @@ impl FrcTeam {
         &self.summary
     }
 
+    /** 
     pub fn get_mut_summary(&mut self) -> &Option<TeamSummary> {
         &mut self.summary
     }
+    */
 
     pub fn query_tba_data(&mut self, auth_key: &str) {
-        self.tba_data = match get_tba_data(auth_key, &("/team/frc".to_owned()+&self.team_number.to_string())) {
+        self.tba_data = match get_tba_data(auth_key, &("/team/frc".to_owned()+&self.teamNumber.to_string())) {
             Ok(data) => Some(data.json::<HashMap<String, serde_json::Value>>().unwrap()),
             Err(err) => None
         };

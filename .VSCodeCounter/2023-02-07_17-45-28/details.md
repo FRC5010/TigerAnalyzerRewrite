@@ -45,7 +45,7 @@ Total : 40 files,  6250 codes, 128 comments, 712 blanks, all 7090 lines
 | [src/assets/js/widgetHandler.js](/src/assets/js/widgetHandler.js) | JavaScript | 15 | 0 | 2 | 17 |
 | [src/assets/js/widgets/Analyze/visualizeOptions.js](/src/assets/js/widgets/Analyze/visualizeOptions.js) | JavaScript | 36 | 1 | 10 | 47 |
 | [src/assets/js/widgets/Data/matchDisplay.js](/src/assets/js/widgets/Data/matchDisplay.js) | JavaScript | 21 | 7 | 6 | 34 |
-| [src/assets/js/widgets/Data/teamDisplay.js](/src/assets/js/widgets/Data/teamDisplay.js) | JavaScript | 79 | 4 | 10 | 93 |
+| [src/assets/js/widgets/Data/EditedCopy.js](/src/assets/js/widgets/Data/teamDisplayEditedCopy.js) | JavaScript | 79 | 4 | 10 | 93 |
 | [src/assets/js/widgets/Match/matchOverviewDisplay.js](/src/assets/js/widgets/Match/matchOverviewDisplay.js) | JavaScript | 67 | 3 | 12 | 82 |
 | [src/assets/svg/cone.svg](/src/assets/svg/cone.svg) | XML | 4 | 0 | 0 | 4 |
 | [src/assets/svg/cube.svg](/src/assets/svg/cube.svg) | XML | 8 | 1 | 7 | 16 |

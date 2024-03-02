@@ -1,3 +1,4 @@
+/*Design for Tiger Analyzer App Surface (UI)*/
 *,
 *::before,
 *::after {
@@ -53,17 +54,18 @@ html {scroll-behavior: smooth;}
     width: 10px;
 }
 
+
 .tiger-scrollbar::-webkit-scrollbar-thumb {
-    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
-    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
-    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    background: -webkit-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: -moz-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: linear-gradient(to bottom left, #8d98ea, #0d8dad);
     border-radius: 25px;
 }
 
 .tiger-scrollbar::-webkit-scrollbar-track {
     border-radius: 25px;
 
-    background-color: rgb(191, 191, 191);
+    background-color: rgb(249, 246, 246);
 }
 
 .data-match-raw-display, .data-team-raw-display {
@@ -137,7 +139,7 @@ html {scroll-behavior: smooth;}
     height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
-    background: linear-gradient(to bottom right, #f44343, #eb3333);
+    background: linear-gradient(to bottom right, #ee8655, #ff2a00);
 }
 
 .team-select-set > .blue-indicator {
@@ -218,11 +220,11 @@ html {scroll-behavior: smooth;}
 
 
 .alliance-group.red > .team-card {
-    background: linear-gradient(to bottom right, #e91919, #e80909);
+    background: linear-gradient(to bottom right, #f47878, #cd1919);
 }
 
 .alliance-group.blue > .team-card {
-    background: linear-gradient(to bottom right, #4358f4, #333feb);
+    background: linear-gradient(to bottom right, #8d98ea, #0715dd);
 }
 
 .match-overview-screen > .vs-separator {
@@ -272,9 +274,9 @@ html {scroll-behavior: smooth;}
     text-align: center;
     font-family: "Gilroy";
     box-sizing: border-box; 
-    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
-    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
-    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    background: -webkit-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: -moz-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: linear-gradient(to bottom right, #8d98ea, #0d8dad);
     border-left: 0px;
     display: flex;
     justify-content: center;
@@ -314,11 +316,12 @@ html {scroll-behavior: smooth;}
     transform: translateX(0%);
 }
 
+
 .data-team-raw-display > .team-entry {
     width: 45%;
-    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
-    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
-    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    background: -webkit-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: -moz-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: linear-gradient(to bottom right, #8d98ea, #0d8dad);
     border-radius: 15px;
     display: flex;
     flex-direction: column;
@@ -372,9 +375,9 @@ html {scroll-behavior: smooth;}
     display: flex;
     align-items: center;
     justify-content: center;
-    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
-    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
-    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    background: -webkit-linear-gradient(top left, #0d8dad, #0d8dad);
+    background: -moz-linear-gradient(top left, #0d8dad, #0d8dad);
+    background: linear-gradient(to bottom right, #0d8dad, #0d8dad);
 }
 
 .team-entry > .dot-menu:hover {
@@ -559,10 +562,17 @@ td > .percentage-bar {
     border: black 2px solid;
 }
 
-.team-select-grid > .select-controls > .select-all {
+/*.team-select-grid > .select-controls > .select-all {
     background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
     background: -moz-linear-gradient(top left, #F45C43, #EB3349);
     background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    color: white;
+}*/
+
+.team-select-grid > .select-controls > .select-all {
+    background: -webkit-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: -moz-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: linear-gradient(to bottom right, #8d98ea, #0d8dad);
     color: white;
 }
 
@@ -570,11 +580,19 @@ td > .percentage-bar {
     cursor: pointer;
 }
 
-.team-select-grid > .team-option.active {
+/*.team-select-grid > .team-option.active {
     border: none;
     background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
     background: -moz-linear-gradient(top left, #F45C43, #EB3349);
     background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    color: white;
+}*/
+
+.team-select-grid > .team-option.active {
+    border: none;
+    background: -webkit-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: -moz-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: linear-gradient(to bottom right, #8d98ea, #0d8dad);
     color: white;
 }
 
@@ -611,9 +629,9 @@ td > .percentage-bar {
 .dot-nav > .dot:hover, .dot-nav > .dot.active {
     
     background-color: rgb(243, 239, 239);
-    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
-    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
-    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    background: -webkit-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: -moz-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: linear-gradient(to bottom right, #8d98ea, #0d8dad);
 }
 
 .dot-nav > .dot:hover:not(.active) {
@@ -631,9 +649,9 @@ td > .percentage-bar {
 .export-box > h1 {
     font-family: 'Gilroy';
     font-size: 64px;
-    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
-    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
-    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    background: -webkit-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: -moz-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: linear-gradient(to bottom right, #8d98ea, #0d8dad);
     background-clip: text;
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
@@ -643,9 +661,9 @@ td > .percentage-bar {
     width: 75px;
     height: 75px;
     border-radius: 20px;
-    background: -webkit-linear-gradient(top left, #F45C43, #EB3349);
-    background: -moz-linear-gradient(top left, #F45C43, #EB3349);
-    background: linear-gradient(to bottom right, #F45C43, #EB3349);
+    background: -webkit-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: -moz-linear-gradient(top left, #8d98ea, #0d8dad);
+    background: linear-gradient(to bottom right, #8d98ea, #0d8dad);
     border: none;
 }
 
@@ -681,19 +699,19 @@ td > .percentage-bar {
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;
-    background-image: linear-gradient(to right, #EB3349 0%, #F45C43  51%, #EB3349  100%);
+    background-image: linear-gradient(to right, #0d8dad 0%, #0d8dad  51%, #43f4c8  100%);
     transition: 0.5s;
     background-size: 200% auto;  
     border-radius: 20px;
 
     box-shadow: 0px 0px 0px rgb(180, 177, 177);
 }
-
+ /*#43f4c8*/
 .navbar > .up-arrow {
     border-radius: 40px;
     width: 40px;
     height: 40px;
-    background-image: linear-gradient(to right, #EB3349 0%, #F45C43  51%, #EB3349  100%);
+    background-image: linear-gradient(to right, #0d8dad 0%, #0d8dad  51%, #0d8dad  100%);
     display: flex;
     text-align: center;
     align-items: center;

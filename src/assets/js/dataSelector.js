@@ -1,3 +1,5 @@
+//How to get and use data from the scouting Excel File.
+
 const { invoke } = window.__TAURI__.tauri;
 const dialog = window.__TAURI__.dialog;
 var filePath = null;

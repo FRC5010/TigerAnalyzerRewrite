@@ -30,10 +30,10 @@ fn read_scout_data(data_path: &str) -> Result<HashMap<u64, FrcTeam>, Box<dyn Err
     for entry in csv_data.deserialize() {
         println!("Entry: {:?}", entry);
         let match_entry: MatchEntry = entry?;
-        if !team_list.contains_key(&match_entry.team_number) {
-            team_list.insert(match_entry.team_number, FrcTeam::new(match_entry.team_number));
+        if !team_list.contains_key(&match_entry.teamNumber) {
+            team_list.insert(match_entry.teamNumber, FrcTeam::new(match_entry.teamNumber));
         }
-        team_list.get_mut(&match_entry.team_number).unwrap().add_match_entry(match_entry);
+        team_list.get_mut(&match_entry.teamNumber).unwrap().add_match_entry(match_entry);
     }
     for team in team_list.values_mut() {
       team.generate_summary();
