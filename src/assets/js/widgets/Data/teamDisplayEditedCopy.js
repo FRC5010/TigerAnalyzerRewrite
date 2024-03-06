@@ -43,8 +43,8 @@ function round2Two(number) {
                     <th>Speaker</th>
                   </tr>
                   <tr> 
-                    <td>${round2Two(team.summary.auton_amp)}</td> <!-- points_trap --->
-                    <td>${round2Two(team.summary.auton_speaker)}</td> 
+                    <td>${round2Two(team.summary.autoamp)}</td> <!-- auto amp, perviously auton_amp --->
+                    <td>${round2Two(team.summary.autospeaker)}</td> <!-- auto speaker, previously auton_speaker -->
                   </tr>
                 </table>
                 <table class="cone-table"> 

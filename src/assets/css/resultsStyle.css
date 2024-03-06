@@ -297,7 +297,7 @@ html {scroll-behavior: smooth;}
     margin-top: 0px;
 }
 
-.team-entry > .cone-table, .team-entry > .cube-table {
+.team-entry > .cone-table, .team-entry > .cube-table { /*Should I change this from cone-table to a different class name?*/
     width: 90%;
     color: white;
     font-weight: bold;

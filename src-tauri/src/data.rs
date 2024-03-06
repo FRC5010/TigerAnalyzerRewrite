@@ -283,7 +283,7 @@ pub struct PointValues {
     pub medium: f64,
     pub high: f64,
     pub climb: f64,
-    pub dock: f64
+    pub dock: f64,
 }
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
