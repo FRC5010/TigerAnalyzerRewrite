@@ -33,21 +33,21 @@ pub struct MatchEntry {
     pub teamNumber: u64,
     pub alliance: String,
     pub startTime: String,
+    #[serde(deserialize_with = "from_scorepoints_string")]
     pub autoamp: u64,
+    #[serde(deserialize_with = "from_scorepoints_string")]
     pub autospeaker: u64,
+    #[serde(deserialize_with = "from_scorepoints_string")]
     pub teleopamp: u64,
+    #[serde(deserialize_with = "from_scorepoints_string")]
     pub teleopspeaker: u64,
+    #[serde(deserialize_with = "from_scorepoints_string")]
     pub teleoptrap: u64,
+    #[serde(deserialize_with = "from_scorepoints_string")]
     pub subwoofer: u64,
     #[serde(deserialize_with = "from_climbtime_string")]
     pub climbtime: u64
-    //#[serde(deserialize_with = "from_charge_station_int")]
-    //end_game_climb: ClimbState
 
-    //#[serde(deserialize_with = "from_bool_string")]
-    //pub floor_pickup: bool,
-    //#[serde(deserialize_with = "from_charge_station_int")]
-    //auton_climb: ClimbState,
 }
 
 impl MatchEntry {
@@ -63,14 +63,13 @@ impl MatchEntry {
     }
 }
 
-fn from_climbtime_string<'de, D>(
+fn from_scorepoints_string<'de, D>(
     deserializer: D,
 ) -> Result<u64, D::Error>
 where 
     D: de::Deserializer<'de>,
 {
-    let s: &str =
-        de::Deserialize::deserialize(deserializer).unwrap_or("0");
+    let s: &str = de::Deserialize::deserialize(deserializer).unwrap_or("0");
     
     match s {
         "undefined" => Ok(0),
@@ -78,13 +77,25 @@ where
     }
 }
 
-/*** 2023 Game remnant.  Leaving for example.
+fn from_climbtime_string<'de, D>(
+    deserializer: D,
+) -> Result<u64, D::Error>
+where 
+    D: de::Deserializer<'de>,
+{
+    let s: &str = de::Deserialize::deserialize(deserializer).unwrap_or("0");
+    
+    match s {
+        "undefined" => Ok(0),
+        _ => Ok(u64::from_str(s).unwrap())
+    }
+}
+
+/*** 2023 Game remnants.  Leaving for coding examples.
 fn empty_tba_data() -> Option<String> {
     None
 }
-***/
 
-/*** 2023 Game remnant.  Leaving for example.
 fn from_bool_string<'de, D>(
     deserializer: D,
 ) -> Result<bool, D::Error>
@@ -101,9 +112,7 @@ where
         
     }
 }
-***/
 
-/*** 2023 Game remnant. Leaving for example.
 fn from_charge_station_int<'de, D>(
     deserializer: D,
 ) -> Result<ClimbState, D::Error>
@@ -122,9 +131,7 @@ where
         _ => Err(de::Error::custom("Not a valid Climb Status"))
     }
 }
-***/
 
-/*** 2023 Game remnant. Leaving for example.
 fn from_match_type_string<'de, D>(
     deserializer: D,
 ) -> Result<MatchType, D::Error>
@@ -199,23 +206,6 @@ impl TeamSummary {
             } else {
                 avg_count.climb_count.push(0);
             }
-            
-           /*  match match_entry.end_game_climb {
-                ClimbState::OffPlatform => {
-                    avg_count.climb_count.push(0);
-                    avg_count.dock_count.push(0);
-                }
-                
-                ClimbState::OnDocked => {
-                    avg_count.climb_count.push(0);
-                    avg_count.dock_count.push(1);
-                }
-                
-                ClimbState::OnPlatform => {
-                    avg_count.climb_count.push(1);
-                    avg_count.dock_count.push(0);
-                }
-            }*/
             
         }
 
