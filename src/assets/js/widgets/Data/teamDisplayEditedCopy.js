@@ -54,18 +54,8 @@ function round2Two(number) {
                     <th>Amplified</th>
                   </tr>
                   <tr>
-                    <td>${round2Two(team.summary.total_speaker)}</td> <!--total_speaker-->
-                    <td>${round2Two(team.summary.speaker_amplified)}</td>
-                  </tr>
-                </table>
-                <table class="cube-table">
-                  <tr> 
-                    <th>Unamplified</th>
-                    <th>Total: Amp</th>
-                  </tr>
-                  <tr>
-                    <td>${round2Two(team.summary.speaker_unamplified)}</td> <!-- speaker_amplified --->
                     <td>${round2Two(team.summary.total_amp)}</td> 
+                    <td>${round2Two(team.summary.total_speaker)}</td> <!--total_speaker-->
                   </tr>
                 </table>
                 <table class="station-table">
