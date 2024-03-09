@@ -50,8 +50,8 @@ function round2Two(number) {
                 <table class="cone-table"> 
                   <caption>Teleop</caption>
                   <tr>
+                    <th>Total: Amp</th>
                     <th>Total: Speaker</th>
-                    <th>Amplified</th>
                   </tr>
                   <tr>
                     <td>${round2Two(team.summary.total_amp)}</td> 
