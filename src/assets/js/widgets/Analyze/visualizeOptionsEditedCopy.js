@@ -13,6 +13,7 @@ function getValueStroke(value) {
     else return "limegreen";
 }
 
+
 function populate_rankings(data, options) {
     resetRankings(data);
     if (options["comparison_team"] == "none") options["comparison_team"] = null;
@@ -65,8 +66,8 @@ function populate_rankings(data, options) {
             makeRating(ratings[0], team.total_points_speaker);
             makeRating(ratings[1], team.points_speaker_amplified);
             makeRating(ratings[2], team.points_speaker_unamplified);
-            makeRating(ratings[3], team.summary.points_trap);
-            makeRating(ratings[4], team.summary.climb_percentage*100);
+            //makeRating(ratings[3], team.summary.points_trap);
+            //makeRating(ratings[4], team.summary.climb_percentage*100);
             makeRating(ratings[5], team.overall_rating);
             rankings.appendChild(div);
 

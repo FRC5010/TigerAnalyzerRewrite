@@ -166,7 +166,6 @@ pub struct TeamSummary {
     pub points_trap: f64,
     pub climb_count: f64,
     pub climb_percentage: f64,
-    pub dock_percentage: f64
 }
 
 /* Team Summary Averages.  Populated based upon summarization of team MatchEntry items. **/
@@ -186,7 +185,6 @@ struct  TeamSummaryAvgCounter {
     points_trap: Vec<u64>,
     climb_count: Vec<u64>,
     climb_percentage: Vec<f64>,
-    dock_count: Vec<u64>
 }
 
 impl TeamSummaryAvgCounter {
@@ -194,7 +192,7 @@ impl TeamSummaryAvgCounter {
         TeamSummaryAvgCounter { total_speaker: Vec::new(), total_speaker_avg: Vec::new(), speaker_amplified: Vec::new(), speaker_unamplified: Vec::new(),  
             total_amp: Vec::new(), total_amp_avg: Vec::new(), amp_amplified: Vec::new(), amp_unamplified: Vec::new(),
             auton_amp: Vec::new(), auton_amp_avg: Vec::new(), auton_speaker: Vec::new(), auton_speaker_avg: Vec::new(), 
-            points_trap: Vec::new(), climb_count: Vec::new(), climb_percentage: Vec::new(), dock_count: Vec::new()
+            points_trap: Vec::new(), climb_count: Vec::new(), climb_percentage: Vec::new()
         }
     }
 }
@@ -221,7 +219,6 @@ impl TeamSummary {
             } else {
                 avg_count.climb_count.push(0);
             }
-            
         }
 
         // TeamSummary object initializer.  Divide TeamSummaryAvgCounter fields by length of each fields array.
@@ -242,7 +239,6 @@ impl TeamSummary {
             points_trap: avg_count.points_trap.iter().copied().sum::<u64>() as f64 / avg_count.points_trap.len() as f64,  
             climb_count: avg_count.climb_count.iter().copied().sum::<u64>() as f64,
             climb_percentage: (avg_count.climb_count.iter().copied().sum::<u64>() as f64 / avg_count.climb_count.len() as f64),
-            dock_percentage: avg_count.dock_count.iter().copied().sum::<u64>() as f64 / avg_count.dock_count.len() as f64,
         }
     }
 
@@ -265,7 +261,6 @@ impl TeamSummary {
             points_trap: (team1.points_trap + team2.points_trap),
             climb_count: team1.climb_count + team2.climb_count,
             climb_percentage: f64::max(team1.climb_percentage, team2.climb_percentage),
-            dock_percentage: f64::max(team1.dock_percentage, team2.dock_percentage)
         }
     }
     pub fn constrain_values(&mut self) -> Self {
@@ -275,7 +270,6 @@ impl TeamSummary {
         self.total_amp = self.total_amp.clamp(0.0, 9.0);
         self.points_trap = self.points_trap.clamp(0.0, 3.0);
         self.climb_count = self.climb_count.clamp(0.0, 1.0);
-        self.dock_percentage = self.dock_percentage.clamp(0.0, 1.0);
         self.to_owned()
     }
 }
@@ -287,7 +281,6 @@ pub struct RankMaxCount {
     pub medium: f64,
     pub high: f64,
     pub climb: f64,
-    pub dock: f64
 }
 
 // TODO update for 2024 game
@@ -296,7 +289,6 @@ pub struct PointValues {
     pub medium: f64,
     pub high: f64,
     pub climb: f64,
-    pub dock: f64,
 }
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
@@ -313,7 +305,6 @@ pub struct TeamRanking {
     pub medium_rating: f64,
     pub high_rating: f64,
     pub climb_rating: f64,
-    pub dock_rating: f64,
     pub data_reliability_rating: f64
 }
 
@@ -335,7 +326,6 @@ impl TeamRanking {
             medium: 3.0,
             high: 5.0,
             climb: 6.0, // This is the remainder of Dock so its not in the total_points
-            dock: 10.0
         };
 
         // TODO: Optimize to not iterate through all teams twice
@@ -360,12 +350,9 @@ impl TeamRanking {
             //if team_summary.balance_percentage > max_rank_count.balance {
             //    max_rank_count.balance = team_summary.balance_percentage;
             //}
-            if team_summary.dock_percentage > max_rank_count.dock {
-                max_rank_count.dock = team_summary.dock_percentage;
-            }
         };
 
-        let total_points_scored = (max_rank_count.low*point_values.low + max_rank_count.medium*point_values.medium + max_rank_count.high*point_values.high + max_rank_count.climb*point_values.climb + max_rank_count.dock*point_values.dock);
+        let total_points_scored = (max_rank_count.low*point_values.low + max_rank_count.medium*point_values.medium + max_rank_count.high*point_values.high + max_rank_count.climb*point_values.climb);
 
         for team in teams.values() {
             if comparison_team.teamNumber == team.teamNumber {
@@ -378,7 +365,6 @@ impl TeamRanking {
             //ranking.medium_rating = team_summary.avg_med / max_rank_count.medium;
             //ranking.high_rating = team_summary.avg_high / max_rank_count.high;
             //ranking.balance_rating = team_summary.balance_percentage / max_rank_count.balance;
-            ranking.dock_rating = team_summary.dock_percentage / max_rank_count.dock;
             ranking.data_reliability_rating = 1.0;
             //ranking.overall_rating = (team_summary.avg_low*point_values.low + team_summary.avg_med*point_values.medium + team_summary.avg_high*point_values.high + team_summary.balance_percentage*point_values.balance + team_summary.dock_percentage*point_values.dock)/total_points_scored;
             rankings.push(ranking);
