@@ -33,21 +33,21 @@ pub struct MatchEntry {
     pub teamNumber: u64,
     pub alliance: String,
     pub startTime: String,
+    #[serde(deserialize_with = "from_scorepoints_string")]
     pub autoamp: u64,
+    #[serde(deserialize_with = "from_scorepoints_string")]
     pub autospeaker: u64,
+    #[serde(deserialize_with = "from_scorepoints_string")]
     pub teleopamp: u64,
+    #[serde(deserialize_with = "from_scorepoints_string")]
     pub teleopspeaker: u64,
+    #[serde(deserialize_with = "from_scorepoints_string")]
     pub teleoptrap: u64,
+    #[serde(deserialize_with = "from_scorepoints_string")]
     pub subwoofer: u64,
     #[serde(deserialize_with = "from_climbtime_string")]
     pub climbtime: u64
-    //#[serde(deserialize_with = "from_charge_station_int")]
-    //end_game_climb: ClimbState
 
-    //#[serde(deserialize_with = "from_bool_string")]
-    //pub floor_pickup: bool,
-    //#[serde(deserialize_with = "from_charge_station_int")]
-    //auton_climb: ClimbState,
 }
 
 impl MatchEntry {
@@ -63,14 +63,13 @@ impl MatchEntry {
     }
 }
 
-fn from_climbtime_string<'de, D>(
+fn from_scorepoints_string<'de, D>(
     deserializer: D,
 ) -> Result<u64, D::Error>
 where 
     D: de::Deserializer<'de>,
 {
-    let s: &str =
-        de::Deserialize::deserialize(deserializer).unwrap_or("0");
+    let s: &str = de::Deserialize::deserialize(deserializer).unwrap_or("0");
     
     match s {
         "undefined" => Ok(0),
@@ -78,13 +77,25 @@ where
     }
 }
 
-/*** 2023 Game remnant.  Leaving for example.
+fn from_climbtime_string<'de, D>(
+    deserializer: D,
+) -> Result<u64, D::Error>
+where 
+    D: de::Deserializer<'de>,
+{
+    let s: &str = de::Deserialize::deserialize(deserializer).unwrap_or("0");
+    
+    match s {
+        "undefined" => Ok(0),
+        _ => Ok(u64::from_str(s).unwrap())
+    }
+}
+
+/*** 2023 Game remnants.  Leaving for coding examples.
 fn empty_tba_data() -> Option<String> {
     None
 }
-***/
 
-/*** 2023 Game remnant.  Leaving for example.
 fn from_bool_string<'de, D>(
     deserializer: D,
 ) -> Result<bool, D::Error>
@@ -101,9 +112,7 @@ where
         
     }
 }
-***/
 
-/*** 2023 Game remnant. Leaving for example.
 fn from_charge_station_int<'de, D>(
     deserializer: D,
 ) -> Result<ClimbState, D::Error>
@@ -122,9 +131,7 @@ where
         _ => Err(de::Error::custom("Not a valid Climb Status"))
     }
 }
-***/
 
-/*** 2023 Game remnant. Leaving for example.
 fn from_match_type_string<'de, D>(
     deserializer: D,
 ) -> Result<MatchType, D::Error>
@@ -145,13 +152,17 @@ where
 pub struct TeamSummary {
     pub teamNumber: u64,
     pub total_speaker: f64,
+    pub total_speaker_avg: f64,
     pub speaker_amplified: f64,
     pub speaker_unamplified: f64,
     pub total_amp: f64,
+    pub total_amp_avg: f64,
     pub amp_amplified: f64,
     pub amp_unamplified: f64,
     pub auton_amp: f64,
+    pub auton_amp_avg: f64,
     pub auton_speaker: f64,
+    pub auton_speaker_avg: f64,
     pub points_trap: f64,
     pub climb_count: f64,
     pub climb_percentage: f64,
@@ -161,13 +172,17 @@ pub struct TeamSummary {
 /* Team Summary Averages.  Populated based upon summarization of team MatchEntry items. **/
 struct  TeamSummaryAvgCounter {
     total_speaker: Vec<u64>,
+    total_speaker_avg: Vec<u64>,
     speaker_amplified: Vec<u64>,
     speaker_unamplified: Vec<u64>,
     total_amp: Vec<u64>,
+    total_amp_avg: Vec<u64>,
     amp_amplified: Vec<u64>,
     amp_unamplified: Vec<u64>,
     auton_amp: Vec<u64>,
+    auton_amp_avg: Vec<u64>,
     auton_speaker: Vec<u64>,
+    auton_speaker_avg: Vec<u64>,
     points_trap: Vec<u64>,
     climb_count: Vec<u64>,
     climb_percentage: Vec<f64>,
@@ -176,8 +191,9 @@ struct  TeamSummaryAvgCounter {
 
 impl TeamSummaryAvgCounter {
     pub fn new() -> TeamSummaryAvgCounter {
-        TeamSummaryAvgCounter { total_speaker: Vec::new(), speaker_amplified: Vec::new(), speaker_unamplified: Vec::new(),  total_amp: Vec::new(), amp_amplified: Vec::new(), amp_unamplified: Vec::new(),
-            auton_amp: Vec::new(), auton_speaker: Vec::new(), 
+        TeamSummaryAvgCounter { total_speaker: Vec::new(), total_speaker_avg: Vec::new(), speaker_amplified: Vec::new(), speaker_unamplified: Vec::new(),  
+            total_amp: Vec::new(), total_amp_avg: Vec::new(), amp_amplified: Vec::new(), amp_unamplified: Vec::new(),
+            auton_amp: Vec::new(), auton_amp_avg: Vec::new(), auton_speaker: Vec::new(), auton_speaker_avg: Vec::new(), 
             points_trap: Vec::new(), climb_count: Vec::new(), climb_percentage: Vec::new(), dock_count: Vec::new()
         }
     }
@@ -189,10 +205,16 @@ impl TeamSummary {
         let mut avg_count = TeamSummaryAvgCounter::new();
         let mut climb_count = 0;
         for match_entry in &team.match_data {
+            avg_count.auton_amp.push(match_entry.autoamp);
+            avg_count.auton_amp_avg.push(match_entry.autoamp);
+            avg_count.auton_speaker.push(match_entry.autospeaker);
+            avg_count.auton_speaker_avg.push(match_entry.autospeaker);
             avg_count.total_speaker.push(match_entry.teleopspeaker);
+            avg_count.total_speaker_avg.push(match_entry.teleopspeaker);
             avg_count.speaker_amplified.push(match_entry.teleopspeaker);
             avg_count.speaker_unamplified.push(match_entry.teleopspeaker);
             avg_count.total_amp.push(match_entry.teleopamp);
+            avg_count.total_amp_avg.push(match_entry.teleopamp);
             avg_count.points_trap.push(match_entry.teleoptrap);
             if match_entry.climbtime > 0 { 
                 avg_count.climb_count.push(1);
@@ -200,36 +222,23 @@ impl TeamSummary {
                 avg_count.climb_count.push(0);
             }
             
-           /*  match match_entry.end_game_climb {
-                ClimbState::OffPlatform => {
-                    avg_count.climb_count.push(0);
-                    avg_count.dock_count.push(0);
-                }
-                
-                ClimbState::OnDocked => {
-                    avg_count.climb_count.push(0);
-                    avg_count.dock_count.push(1);
-                }
-                
-                ClimbState::OnPlatform => {
-                    avg_count.climb_count.push(1);
-                    avg_count.dock_count.push(0);
-                }
-            }*/
-            
         }
 
         // TeamSummary object initializer.  Divide TeamSummaryAvgCounter fields by length of each fields array.
         TeamSummary { 
             teamNumber: team.teamNumber, 
-            total_speaker: avg_count.total_speaker.iter().copied().sum::<u64>() as f64 / avg_count.total_speaker.len() as f64, 
+            total_speaker: avg_count.total_speaker.iter().copied().sum::<u64>() as f64, 
+            total_speaker_avg: avg_count.total_speaker_avg.iter().copied().sum::<u64>() as f64 / avg_count.total_speaker_avg.len() as f64, 
             speaker_amplified: avg_count.speaker_amplified.iter().copied().sum::<u64>() as f64 / avg_count.speaker_amplified.len() as f64, 
             speaker_unamplified: avg_count.speaker_unamplified.iter().copied().sum::<u64>() as f64 / avg_count.speaker_unamplified.len() as f64, 
-            total_amp: avg_count.total_amp.iter().copied().sum::<u64>() as f64 / avg_count.total_amp.len() as f64, 
+            total_amp: avg_count.total_amp.iter().copied().sum::<u64>() as f64, 
+            total_amp_avg: avg_count.total_amp_avg.iter().copied().sum::<u64>() as f64 / avg_count.total_amp_avg.len() as f64, 
             amp_amplified: avg_count.amp_amplified.iter().copied().sum::<u64>() as f64 / avg_count.total_amp.len() as f64,
             amp_unamplified: avg_count.amp_unamplified.iter().copied().sum::<u64>() as f64 / avg_count.total_amp.len() as f64,
-            auton_amp: avg_count.auton_amp.iter().copied().sum::<u64>() as f64 / avg_count.total_amp.len() as f64,
-            auton_speaker: avg_count.auton_speaker.iter().copied().sum::<u64>() as f64 / avg_count.total_speaker.len() as f64,
+            auton_amp: avg_count.auton_amp.iter().copied().sum::<u64>() as f64,
+            auton_amp_avg: avg_count.auton_amp.iter().copied().sum::<u64>() as f64 / avg_count.auton_amp_avg.len() as f64,
+            auton_speaker: avg_count.auton_speaker.iter().copied().sum::<u64>() as f64,
+            auton_speaker_avg: avg_count.auton_speaker.iter().copied().sum::<u64>() as f64 / avg_count.auton_speaker_avg.len() as f64,
             points_trap: avg_count.points_trap.iter().copied().sum::<u64>() as f64 / avg_count.points_trap.len() as f64,  
             climb_count: avg_count.climb_count.iter().copied().sum::<u64>() as f64,
             climb_percentage: (avg_count.climb_count.iter().copied().sum::<u64>() as f64 / avg_count.climb_count.len() as f64),
@@ -242,13 +251,17 @@ impl TeamSummary {
         TeamSummary {
             teamNumber: team1.teamNumber,
             total_speaker: (team1.total_speaker + team2.total_speaker),
+            total_speaker_avg: (team1.total_speaker_avg + team2.total_speaker_avg),
             speaker_amplified: (team1.speaker_amplified + team2.speaker_amplified),
             speaker_unamplified: (team1.speaker_unamplified + team2.speaker_unamplified),
             total_amp: (team1.total_amp + team2.total_amp),
+            total_amp_avg: (team1.total_amp_avg + team2.total_amp_avg),
             amp_amplified: (team1.amp_amplified + team2.amp_amplified),
             amp_unamplified: (team1.amp_unamplified + team2.amp_unamplified),
             auton_amp: (team1.auton_amp + team2.auton_amp),
+            auton_amp_avg: (team1.auton_amp_avg + team2.auton_amp_avg),
             auton_speaker: (team1.auton_speaker + team2.auton_speaker),
+            auton_speaker_avg: (team1.auton_speaker_avg + team2.auton_speaker_avg),
             points_trap: (team1.points_trap + team2.points_trap),
             climb_count: team1.climb_count + team2.climb_count,
             climb_percentage: f64::max(team1.climb_percentage, team2.climb_percentage),

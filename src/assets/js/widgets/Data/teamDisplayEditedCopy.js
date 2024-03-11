@@ -37,35 +37,25 @@ function round2Two(number) {
                 <div class="label">${team.teamNumber}</div>
                 <div class="team-name">${(team.tba_data) ? team.tba_data.nickname:"Team"} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
                 <table class="cone-table">
-                  <caption>Auto</caption>
+                  <caption>Autonomous</caption>
                   <tr>
-                    <th>Amp</th>
-                    <th>Speaker</th>
+                    <th>Total&nbsp;/&nbsp;Avg Amp</th>
+                    <th>Total&nbsp;/&nbsp;Avg Speaker</th>
                   </tr>
                   <tr> 
-                    <td>${round2Two(team.summary.autoamp)}</td> <!-- auto amp, perviously auton_amp --->
-                    <td>${round2Two(team.summary.autospeaker)}</td> <!-- auto speaker, previously auton_speaker -->
+                    <td>${round2Two(team.summary.auton_amp)}&nbsp;/&nbsp;${round2Two(team.summary.auton_amp_avg)}</td> <!-- auto amp, perviously auton_amp --->
+                    <td>${round2Two(team.summary.auton_speaker)}&nbsp;/&nbsp;${round2Two(team.summary.auton_speaker_avg)}</td> <!-- auto speaker, previously auton_speaker -->
                   </tr>
                 </table>
                 <table class="cone-table"> 
                   <caption>Teleop</caption>
                   <tr>
-                    <th>Total: Speaker</th>
-                    <th>Amplified</th>
+                    <th>Total&nbsp;/&nbsp;Avg Amp</th>
+                    <th>Total&nbsp;/&nbsp;Avg Speaker</th>
                   </tr>
                   <tr>
-                    <td>${round2Two(team.summary.total_speaker)}</td> <!--total_speaker-->
-                    <td>${round2Two(team.summary.speaker_amplified)}</td>
-                  </tr>
-                </table>
-                <table class="cube-table">
-                  <tr> 
-                    <th>Unamplified</th>
-                    <th>Total: Amp</th>
-                  </tr>
-                  <tr>
-                    <td>${round2Two(team.summary.speaker_unamplified)}</td> <!-- speaker_amplified --->
-                    <td>${round2Two(team.summary.total_amp)}</td> 
+                    <td>${round2Two(team.summary.total_amp)} / ${round2Two(team.summary.total_amp_avg)}</td> 
+                    <td>${round2Two(team.summary.total_speaker)} / ${round2Two(team.summary.total_speaker_avg)}</td> 
                   </tr>
                 </table>
                 <table class="station-table">
