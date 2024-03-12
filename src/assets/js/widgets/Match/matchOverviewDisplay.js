@@ -23,13 +23,15 @@ function getValueStroke(value) {
                     <div class="cones-row">
                     <object class="caption-icon" data="" type=""></object>
                       <table class="cone-table">
-                        <tr>
-                          <th>Auton Amp Avg</th>
+                      <tr>
+                         <th>Ampli. </th>
+                          <th>Auto Amp Avg</th>
                           <th>Auto Speaker Avg</th>
                         </tr>
                         <tr>
-                          <td>${round2Two(team.summary.auton_amp_avg)}</td>
-                          <td>${round2Two(team.summary.auton_speaker_avg)}</td>
+                          <th>${round2Two(team.summary.amplifications)}</th>
+                          <td>${round2Two(team.summary.auton_amp_avg.toFixed(3))}</td>
+                          <td>${round2Two(team.summary.auton_speaker_avg.toFixed(3))}</td>
                         </tr>
                       </table>
                     </div>
@@ -37,12 +39,12 @@ function getValueStroke(value) {
                       <object class="caption-icon" data="" type=""></object>
                       <table class="cube-table">
                         <tr>
-                          <th>Amp Avg</th>
-                          <th>Speaker Avg</th>
+                          <th>Teleop Amp Avg</th>
+                          <th>Teleop Speaker Avg</th>
                         </tr>
                         <tr>
-                          <td>${round2Two(team.summary.total_amp_avg)}</td>
-                          <td>${round2Two(team.summary.total_speaker_avg)}</td>
+                          <td>${round2Two(team.summary.total_amp_avg.toFixed(3))}</td>
+                          <td>${round2Two(team.summary.total_speaker_avg.toFixed(3))}</td>
                         </tr>
                       </table>
                     </div>
@@ -53,7 +55,7 @@ function getValueStroke(value) {
                     <th class="station-text">Endgame Climb</th>
                   </tr>
                   <tr>
-                    <td style="text-align:center;">${team.summary.points_trap}</td>
+                    <td style="text-align:center;">${team.summary.points_trap.toFixed(3)}</td>
                     <td style="text-align:center;">${team.summary.climb_count}</td>
                   </tr>
                 </table>`
