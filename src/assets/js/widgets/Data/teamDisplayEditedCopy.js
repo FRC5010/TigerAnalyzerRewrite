@@ -37,6 +37,13 @@ function round2Two(number) {
                 <div class="label">${team.teamNumber}</div>
                 <div class="team-name">${(team.tba_data) ? team.tba_data.nickname:"Team"} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
                 <table class="cone-table">
+                  <caption>Amplifications</caption>
+                  <tr>
+                    <td>${round2Two(team.summary.amplifications)}</td>
+                  </tr>
+
+                </table>
+                <table class="cone-table">
                   <caption>Autonomous</caption>
                   <tr>
                     <th>Total&nbsp;/&nbsp;Avg Amp</th>

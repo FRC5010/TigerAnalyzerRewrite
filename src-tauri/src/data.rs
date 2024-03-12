@@ -24,12 +24,7 @@ enum MatchType {
 /* Definition of MatchEntry record.  Based upon CSV file headers. */
 #[derive(Default, Debug, Serialize, Deserialize, Clone)]
 pub struct MatchEntry {
-   // #[serde(deserialize_with = "from_match_type_string")]
-    //match_type: MatchType,
-    //#[serde(default = "empty_tba_data")]
-    //pub tba_match_data: Option<String>,
-
-    // Game(2024) settings.
+    
     pub teamNumber: u64,
     pub alliance: String,
     pub startTime: String,
@@ -44,13 +39,16 @@ pub struct MatchEntry {
     #[serde(deserialize_with = "from_scorepoints_string")]
     pub teleoptrap: u64,
     #[serde(deserialize_with = "from_climbtime_string")]
-    pub climbtime: u64
-
+    pub climbtime: u64,
+    #[serde(deserialize_with = "from_scorepoints_string")]
+    pub amplifications: u64
 }
 
 impl MatchEntry {
+    //TODO: CLJ: should we constrain this?  if they are wrong, who decides what is too high?
+    //      better to 0 the value if we get a negative, and leave other values alone.
     pub fn constrain_values(&mut self) -> MatchEntry {
-        // Game(2024) settings.
+        
         self.autoamp = self.autoamp.clamp(0, 5);
         self.autospeaker = self.autospeaker.clamp(0, 5);
         self.teleopamp = self.teleopamp.clamp(0, 20);
@@ -163,6 +161,7 @@ pub struct TeamSummary {
     pub points_trap: f64,
     pub climb_count: f64,
     pub climb_percentage: f64,
+    pub amplifications: f64,
 }
 
 /* Team Summary Averages.  Populated based upon summarization of team MatchEntry items. **/
@@ -182,6 +181,7 @@ struct  TeamSummaryAvgCounter {
     points_trap: Vec<u64>,
     climb_count: Vec<u64>,
     climb_percentage: Vec<f64>,
+    amplifications: Vec<u64>
 }
 
 impl TeamSummaryAvgCounter {
@@ -189,7 +189,7 @@ impl TeamSummaryAvgCounter {
         TeamSummaryAvgCounter { total_speaker: Vec::new(), total_speaker_avg: Vec::new(), speaker_amplified: Vec::new(), speaker_unamplified: Vec::new(),  
             total_amp: Vec::new(), total_amp_avg: Vec::new(), amp_amplified: Vec::new(), amp_unamplified: Vec::new(),
             auton_amp: Vec::new(), auton_amp_avg: Vec::new(), auton_speaker: Vec::new(), auton_speaker_avg: Vec::new(), 
-            points_trap: Vec::new(), climb_count: Vec::new(), climb_percentage: Vec::new()
+            points_trap: Vec::new(), climb_count: Vec::new(), climb_percentage: Vec::new(), amplifications: Vec::new()
         }
     }
 }
@@ -211,6 +211,7 @@ impl TeamSummary {
             avg_count.total_amp.push(match_entry.teleopamp);
             avg_count.total_amp_avg.push(match_entry.teleopamp);
             avg_count.points_trap.push(match_entry.teleoptrap);
+            avg_count.amplifications.push(match_entry.amplifications);
             if match_entry.climbtime > 0 { 
                 avg_count.climb_count.push(1);
             } else {
@@ -236,6 +237,7 @@ impl TeamSummary {
             points_trap: avg_count.points_trap.iter().copied().sum::<u64>() as f64 / avg_count.points_trap.len() as f64,  
             climb_count: avg_count.climb_count.iter().copied().sum::<u64>() as f64,
             climb_percentage: (avg_count.climb_count.iter().copied().sum::<u64>() as f64 / avg_count.climb_count.len() as f64),
+            amplifications: (avg_count.amplifications.iter().copied().sum::<u64>() as f64)
         }
     }
 
@@ -257,7 +259,8 @@ impl TeamSummary {
             auton_speaker_avg: (team1.auton_speaker_avg + team2.auton_speaker_avg),
             points_trap: (team1.points_trap + team2.points_trap),
             climb_count: team1.climb_count + team2.climb_count,
-            climb_percentage: f64::max(team1.climb_percentage, team2.climb_percentage),
+            climb_percentage: f64::max(team1.climb_percentage, team2.climb_percentage),            
+            amplifications: (team1.amplifications + team2.amplifications)
         }
     }
     pub fn constrain_values(&mut self) -> Self {
@@ -306,7 +309,14 @@ pub struct TeamRanking {
 }
 
 
-impl TeamRanking {
+impl TeamRanking 
+{
+    //CLJ: rank by:
+    //      Sort by teams that AMP up
+    //      Then sort by teams that have the highest speaker shots
+    //      Then sort by teams that have the highest amp shots?
+    //      OR 
+	//      Sort by the teams that have highest climb numbers?
     pub fn generate_rankings(teams: HashMap<u64, FrcTeam>, options: RankOptions) -> Vec<TeamRanking> {
         let mut max_rank_count = RankMaxCount::default();
         let mut rankings = Vec::new();
