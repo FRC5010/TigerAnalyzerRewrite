@@ -43,8 +43,6 @@ pub struct MatchEntry {
     pub teleopspeaker: u64,
     #[serde(deserialize_with = "from_scorepoints_string")]
     pub teleoptrap: u64,
-    #[serde(deserialize_with = "from_scorepoints_string")]
-    pub subwoofer: u64,
     #[serde(deserialize_with = "from_climbtime_string")]
     pub climbtime: u64
 
@@ -58,7 +56,6 @@ impl MatchEntry {
         self.teleopamp = self.teleopamp.clamp(0, 20);
         self.teleopspeaker = self.teleopspeaker.clamp(0, 20);
         self.teleoptrap = self.teleoptrap.clamp(0, 3);
-        self.subwoofer = self.subwoofer.clamp(0, 20);
         self.to_owned()
     }
 }
