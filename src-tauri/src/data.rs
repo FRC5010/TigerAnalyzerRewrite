@@ -275,21 +275,18 @@ impl TeamSummary {
 }
 
 #[derive(Debug, Default, Clone, Serialize)]
-//TODO update for 2024 game
+//tracks the max value of each of the following items for each combined team so we can guage how each 
+//combined team sits wrt the max value
 pub struct RankMaxCount {
-    pub low: f64,
-    pub medium: f64,
-    pub high: f64,
-    pub climb: f64,
+    pub autoamp: f64,
+    pub autospeaker: f64,
+    pub teleopamp: f64,
+    pub teleopspeaker: f64,
+    pub teleoptrap: f64,
+    pub climbcount: f64,
+    pub amplification: f64
 }
 
-// TODO update for 2024 game
-pub struct PointValues {
-    pub low: f64,
-    pub medium: f64,
-    pub high: f64,
-    pub climb: f64,
-}
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RankOptions {
@@ -316,24 +313,17 @@ impl TeamRanking
     //      Then sort by teams that have the highest speaker shots
     //      Then sort by teams that have the highest amp shots?
     //      OR 
-	//      Sort by the teams that have highest climb numbers?
+    //      Sort by the teams that have highest climb numbers?
     pub fn generate_rankings(teams: HashMap<u64, FrcTeam>, options: RankOptions) -> Vec<TeamRanking> {
-        let mut max_rank_count = RankMaxCount::default();
+        let mut max_rank = RankMaxCount::default();
         let mut rankings = Vec::new();
         let mut comparison_team: FrcTeam;
-        if options.comparison_team.is_none() { // Comparison Team is the team that is being added to each team to get the rating as if two teams were together
+        // Comparison Team is the team that is being added to each team to get the rating as if two teams were together
+        if options.comparison_team.is_none() { 
             comparison_team = FrcTeam::default();
         } else {
             comparison_team = options.comparison_team.unwrap();
         }
-
-        // TODO: Make these better to configure
-        let point_values = PointValues {
-            low: 2.0,
-            medium: 3.0,
-            high: 5.0,
-            climb: 6.0, // This is the remainder of Dock so its not in the total_points
-        };
 
         // TODO: Optimize to not iterate through all teams twice
         for mut team in teams.values() {
@@ -342,8 +332,13 @@ impl TeamRanking
             }
             if (comparison_team.get_summary().is_none()) {
                 comparison_team.summary = Some(TeamSummary::default());
-            }  // Stupid hack to make sure comparison team has a summary
+            }  // Stupid hack to make sure comparison team has a summary.
+
+            //CLJ: why constrain only the comparison team?  why constrain at all?
             let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap()).constrain_values();
+           
+            max_rank.amplification = if (team_summary.amplifications > max_rank.amplification) {team_summary.amplifications} else {max_rank.amplification}
+            
             
             //if team_summary.avg_low > max_rank_count.low {
             //    max_rank_count.low = team_summary.avg_low;
@@ -359,8 +354,9 @@ impl TeamRanking
             //}
         };
 
-        let total_points_scored = (max_rank_count.low*point_values.low + max_rank_count.medium*point_values.medium + max_rank_count.high*point_values.high + max_rank_count.climb*point_values.climb);
-
+        //let total_points_scored = (max_rank_count.low*point_values.low + max_rank_count.medium*point_values.medium + max_rank_count.high*point_values.high + max_rank_count.climb*point_values.climb);
+        let total_points_scored = 1;
+    
         for team in teams.values() {
             if comparison_team.teamNumber == team.teamNumber {
                 continue;
