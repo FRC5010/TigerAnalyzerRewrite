@@ -31,10 +31,14 @@ function populate_rankings(data, options) {
                 <div class="team-number">${team.teamNumber}</div>
             </div>  
             <div class="rate-data">
-                  <div class="rating-group">
+                <div class="rating-group" >
+                    <div class="rating-label">amplifications</div>
+                    <div class="sub-rating rating-bar ldBar label-center"></div>
+                </div>
+                <div class="rating-group">
                     <div class="rating-label">autoamp</div>
                     <div class="sub-rating rating-bar ldBar label-center"></div>
-                    </div>
+                </div>
                 <div class="rating-group">
                     <div class="rating-label">autospeaker</div>
                     <div class="sub-rating rating-bar ldBar label-center"></div>
@@ -55,12 +59,9 @@ function populate_rankings(data, options) {
                     <div class="rating-label">climbcount</div>
                     <div class="sub-rating rating-bar ldBar label-center"></div>
                 </div>
-                <div class="rating-group" >
-                    <div class="rating-label">amplifications</div>
-                    <div class="sub-rating rating-bar ldBar label-center"></div>
-                </div>
-                  <div class="overall-rating rating-bar ldBar label-center"></div>
-                </div>
+                
+                <!--<div class="overall-rating rating-bar ldBar label-center"></div>
+                </div> -->
               `;
 
             let ratings = div.getElementsByClassName("rating-bar");
@@ -71,14 +72,15 @@ function populate_rankings(data, options) {
 
             //Where are these variables declared?
             let piece_rating_average = Math.round(((team.low_rating+team.medium_rating+team.high_rating)/3)*100);
+            makeRating(ratings[6], team.amplification_rating);
             makeRating(ratings[0], team.autoamp_rating);
             makeRating(ratings[1], team.autospeaker_rating);
             makeRating(ratings[2], team.teleopamp_rating);
             makeRating(ratings[3], team.teleopspeaker_rating);
             makeRating(ratings[4], team.teleoptrap_rating);
             makeRating(ratings[5], team.climbcount_rating);
-            makeRating(ratings[6], team.amplification_rating);
-            makeRating(ratings[7], team.overall_rating);
+            
+            //makeRating(ratings[7], team.overall_rating);
             rankings.appendChild(div);
 
         }
@@ -96,7 +98,11 @@ function populateOptions(data) {
     document.querySelector(".comparison-team-select").addEventListener("change", (event) => {
         let teamNumber = event.target.value;
         let team = data[teamNumber];
-        populate_rankings(data, {"comparison_team": team})
+
+        let ranking_order1 = document.querySelector(".ranking-order1-select").value;
+
+        populate_rankings(data, {"comparison_team": team, "rank_order1": ranking_order1})
+        //populate_rankings(data, {"comparison_team": team})
     });
     document.querySelector(".comparison-team-select").innerHTML = teamOptionsHtml;
 

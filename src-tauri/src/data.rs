@@ -296,7 +296,8 @@ pub struct RankMaxCount {
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RankOptions {
-    pub comparison_team: Option<FrcTeam>
+    pub comparison_team: Option<FrcTeam>,
+    pub rank_order1: Option<String>
 }
 
 // TODO update for 2024 game
