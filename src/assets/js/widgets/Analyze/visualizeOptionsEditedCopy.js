@@ -32,23 +32,31 @@ function populate_rankings(data, options) {
             </div>  
             <div class="rate-data">
                   <div class="rating-group">
-                    <div class="rating-label">Low</div>
+                    <div class="rating-label">autoamp</div>
                     <div class="sub-rating rating-bar ldBar label-center"></div>
                     </div>
                 <div class="rating-group">
-                    <div class="rating-label">Medium</div>
-                    <div class="sub-rating rating-bar ldBar label-center"></div>
-                </div>
-                <div class="rating-group" style="margin-right:10px">
-                    <div class="rating-label">High</div>
+                    <div class="rating-label">autospeaker</div>
                     <div class="sub-rating rating-bar ldBar label-center"></div>
                 </div>
                 <div class="rating-group">
-                    <div class="rating-label">Climb</div> 
+                    <div class="rating-label">teleopamp</div>
                     <div class="sub-rating rating-bar ldBar label-center"></div>
                 </div>
-                <div class="rating-group" style="margin-right:20px">
-                    <div class="rating-label">Dock</div>
+                <div class="rating-group">
+                    <div class="rating-label">teleopspeaker</div> 
+                    <div class="sub-rating rating-bar ldBar label-center"></div>
+                </div>
+                <div class="rating-group" >
+                    <div class="rating-label">teleoptrap</div>
+                    <div class="sub-rating rating-bar ldBar label-center"></div>
+                </div>
+                <div class="rating-group" >
+                    <div class="rating-label">climbcount</div>
+                    <div class="sub-rating rating-bar ldBar label-center"></div>
+                </div>
+                <div class="rating-group" >
+                    <div class="rating-label">amplifications</div>
                     <div class="sub-rating rating-bar ldBar label-center"></div>
                 </div>
                   <div class="overall-rating rating-bar ldBar label-center"></div>
@@ -63,12 +71,14 @@ function populate_rankings(data, options) {
 
             //Where are these variables declared?
             let piece_rating_average = Math.round(((team.low_rating+team.medium_rating+team.high_rating)/3)*100);
-            makeRating(ratings[0], team.total_points_speaker);
-            makeRating(ratings[1], team.points_speaker_amplified);
-            makeRating(ratings[2], team.points_speaker_unamplified);
-            //makeRating(ratings[3], team.summary.points_trap);
-            //makeRating(ratings[4], team.summary.climb_percentage*100);
-            makeRating(ratings[5], team.overall_rating);
+            makeRating(ratings[0], team.autoamp_rating);
+            makeRating(ratings[1], team.autospeaker_rating);
+            makeRating(ratings[2], team.teleopamp_rating);
+            makeRating(ratings[3], team.teleopspeaker_rating);
+            makeRating(ratings[4], team.teleoptrap_rating);
+            makeRating(ratings[5], team.climbcount_rating);
+            makeRating(ratings[6], team.amplification_rating);
+            makeRating(ratings[7], team.overall_rating);
             rankings.appendChild(div);
 
         }

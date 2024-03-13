@@ -284,9 +284,15 @@ pub struct RankMaxCount {
     pub teleopspeaker: f64,
     pub teleoptrap: f64,
     pub climbcount: f64,
-    pub amplification: f64
+    pub amplifications: f64
 }
 
+//pub struct PointValues {
+//    pub low: f64,
+//    pub medium: f64,
+//    pub high: f64,
+//    pub climb: f64,
+//}
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RankOptions {
@@ -298,10 +304,13 @@ pub struct RankOptions {
 pub struct TeamRanking {
     pub teamNumber: u64,
     pub overall_rating: f64,
-    pub low_rating: f64,
-    pub medium_rating: f64,
-    pub high_rating: f64,
-    pub climb_rating: f64,
+    pub autoamp_rating: f64,
+    pub autospeaker_rating: f64,
+    pub teleopamp_rating: f64,
+    pub teleopspeaker_rating: f64,
+    pub teleoptrap_rating: f64,
+    pub climbcount_rating: f64,
+    pub amplification_rating: f64,
     pub data_reliability_rating: f64
 }
 
@@ -325,6 +334,14 @@ impl TeamRanking
             comparison_team = options.comparison_team.unwrap();
         }
 
+//        // TODO: Make these better to configure
+//        let point_values = PointValues {
+//            low: 2.0,
+//            medium: 3.0,
+//            high: 5.0,
+//            climb: 6.0, // This is the remainder of Dock so its not in the total_points
+//        };
+
         // TODO: Optimize to not iterate through all teams twice
         for mut team in teams.values() {
             if (comparison_team.teamNumber == team.teamNumber) {
@@ -337,21 +354,14 @@ impl TeamRanking
             //CLJ: why constrain only the comparison team?  why constrain at all?
             let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap()).constrain_values();
            
-            max_rank.amplification = if (team_summary.amplifications > max_rank.amplification) {team_summary.amplifications} else {max_rank.amplification}
+            max_rank.autoamp = if (team_summary.auton_amp > max_rank.autoamp) {team_summary.auton_amp} else {max_rank.autoamp};
+            max_rank.autospeaker = if (team_summary.auton_speaker > max_rank.autospeaker) {team_summary.auton_speaker} else {max_rank.autospeaker};
+            max_rank.teleopamp = if (team_summary.total_amp > max_rank.teleopamp) {team_summary.total_amp} else {max_rank.teleopamp};
+            max_rank.teleopspeaker = if (team_summary.total_speaker > max_rank.teleopspeaker) {team_summary.total_speaker} else {max_rank.teleopspeaker};
+            max_rank.teleoptrap = if (team_summary.points_trap > max_rank.teleoptrap) {team_summary.points_trap} else {max_rank.teleoptrap};
+            max_rank.climbcount = if (team_summary.climb_count > max_rank.climbcount) {team_summary.climb_count} else {max_rank.climbcount};
+            max_rank.amplifications = if (team_summary.amplifications > max_rank.amplifications) {team_summary.amplifications} else {max_rank.amplifications};
             
-            
-            //if team_summary.avg_low > max_rank_count.low {
-            //    max_rank_count.low = team_summary.avg_low;
-            //}
-            //if team_summary.avg_med > max_rank_count.medium {
-            //    max_rank_count.medium = team_summary.avg_med;
-            //}
-            //if team_summary.avg_high > max_rank_count.high {
-            //    max_rank_count.high = team_summary.avg_high;
-            //}
-            //if team_summary.balance_percentage > max_rank_count.balance {
-            //    max_rank_count.balance = team_summary.balance_percentage;
-            //}
         };
 
         //let total_points_scored = (max_rank_count.low*point_values.low + max_rank_count.medium*point_values.medium + max_rank_count.high*point_values.high + max_rank_count.climb*point_values.climb);
@@ -364,12 +374,16 @@ impl TeamRanking
             let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap()).constrain_values();
             let mut ranking = TeamRanking::default();
             ranking.teamNumber = team.teamNumber;
-            //ranking.low_rating = team_summary.avg_low / max_rank_count.low;
-            //ranking.medium_rating = team_summary.avg_med / max_rank_count.medium;
-            //ranking.high_rating = team_summary.avg_high / max_rank_count.high;
-            //ranking.balance_rating = team_summary.balance_percentage / max_rank_count.balance;
+            ranking.autoamp_rating = team_summary.auton_amp / max_rank.autoamp;
+            ranking.autospeaker_rating = team_summary.auton_speaker / max_rank.autospeaker;
+            ranking.teleopamp_rating = team_summary.total_amp / max_rank.teleopamp;
+            ranking.teleopspeaker_rating = team_summary.total_speaker / max_rank.teleopspeaker;
+            ranking.teleoptrap_rating = team_summary.points_trap / max_rank.teleoptrap;
+            ranking.climbcount_rating = team_summary.climb_count / max_rank.climbcount;
+            ranking.amplification_rating = team_summary.amplifications / max_rank.amplifications;
             ranking.data_reliability_rating = 1.0;
             //ranking.overall_rating = (team_summary.avg_low*point_values.low + team_summary.avg_med*point_values.medium + team_summary.avg_high*point_values.high + team_summary.balance_percentage*point_values.balance + team_summary.dock_percentage*point_values.dock)/total_points_scored;
+            ranking.overall_rating=1.0;
             rankings.push(ranking);
         };
         rankings
