@@ -51,7 +51,7 @@ fn generate_rankings(team_data: HashMap<u64, FrcTeam>, options: RankOptions) -> 
 #[tauri::command]
 fn get_team_rankings(handle: tauri::AppHandle, team_data: HashMap<u64, FrcTeam>, options: RankOptions) -> Vec<TeamRanking> {
     let mut data: Vec<TeamRanking> = generate_rankings(team_data, options); 
-    data.sort_by(|a, b| b.overall_rating.partial_cmp(&a.overall_rating).unwrap_or(std::cmp::Ordering::Equal));
+    data.sort_by(|a, b| b.amplification_rating.partial_cmp(&a.amplification_rating).unwrap_or(std::cmp::Ordering::Equal));
     return data;
 }
 

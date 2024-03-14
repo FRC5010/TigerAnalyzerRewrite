@@ -72,13 +72,13 @@ function populate_rankings(data, options) {
 
             //Where are these variables declared?
             let piece_rating_average = Math.round(((team.low_rating+team.medium_rating+team.high_rating)/3)*100);
-            makeRating(ratings[6], team.amplification_rating);
-            makeRating(ratings[0], team.autoamp_rating);
-            makeRating(ratings[1], team.autospeaker_rating);
-            makeRating(ratings[2], team.teleopamp_rating);
-            makeRating(ratings[3], team.teleopspeaker_rating);
-            makeRating(ratings[4], team.teleoptrap_rating);
-            makeRating(ratings[5], team.climbcount_rating);
+            makeRating(ratings[0], team.amplification_rating);
+            makeRating(ratings[1], team.autoamp_rating);
+            makeRating(ratings[2], team.autospeaker_rating);
+            makeRating(ratings[3], team.teleopamp_rating);
+            makeRating(ratings[4], team.teleopspeaker_rating);
+            makeRating(ratings[5], team.teleoptrap_rating);
+            makeRating(ratings[6], team.climbcount_rating);
             
             //makeRating(ratings[7], team.overall_rating);
             rankings.appendChild(div);

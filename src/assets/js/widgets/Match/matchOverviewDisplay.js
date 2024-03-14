@@ -25,13 +25,13 @@ function getValueStroke(value) {
                       <table class="cone-table">
                       <tr>
                          <th>Ampli. </th>
-                          <th>Auto Amp Avg</th>
-                          <th>Auto Speaker Avg</th>
+                          <th>Auto Amp</th>
+                          <th>Auto Speaker</th>
                         </tr>
                         <tr>
                           <th>${round2Two(team.summary.amplifications)}</th>
-                          <td>${round2Two(team.summary.auton_amp_avg.toFixed(3))}</td>
-                          <td>${round2Two(team.summary.auton_speaker_avg.toFixed(3))}</td>
+                          <td>${round2Two(team.summary.auton_amp.toFixed(3))}</td>
+                          <td>${round2Two(team.summary.auton_speaker.toFixed(3))}</td>
                         </tr>
                       </table>
                     </div>
@@ -39,20 +39,20 @@ function getValueStroke(value) {
                       <object class="caption-icon" data="" type=""></object>
                       <table class="cube-table">
                         <tr>
-                          <th>Teleop Amp Avg</th>
-                          <th>Teleop Speaker Avg</th>
+                          <th>Teleop Amp</th>
+                          <th>Teleop Speaker</th>
                         </tr>
                         <tr>
-                          <td>${round2Two(team.summary.total_amp_avg.toFixed(3))}</td>
-                          <td>${round2Two(team.summary.total_speaker_avg.toFixed(3))}</td>
+                          <td>${round2Two(team.summary.teleopamp.toFixed(3))}</td>
+                          <td>${round2Two(team.summary.total_speaker.toFixed(3))}</td>
                         </tr>
                       </table>
                     </div>
   
                 <table class="station-table">
                   <tr>
-                    <th class="station-text">Endgame Trap</th>
-                    <th class="station-text">Endgame Climb</th>
+                    <th class="station-text">Trap</th>
+                    <th class="station-text">Climb</th>
                   </tr>
                   <tr>
                     <td style="text-align:center;">${team.summary.points_trap.toFixed(3)}</td>

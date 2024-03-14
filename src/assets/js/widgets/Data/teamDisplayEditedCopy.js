@@ -61,7 +61,7 @@ function round2Two(number) {
                     <th>Total&nbsp;/&nbsp;Avg Speaker</th>
                   </tr>
                   <tr>
-                    <td>${round2Two(team.summary.total_amp)} / ${round2Two(team.summary.total_amp_avg.toFixed(3))}</td> 
+                    <td>${round2Two(team.summary.teleopamp)} / ${round2Two(team.summary.teleopamp_avg.toFixed(3))}</td> 
                     <td>${round2Two(team.summary.total_speaker)} / ${round2Two(team.summary.total_speaker_avg.toFixed(3))}</td> 
                   </tr>
                 </table>

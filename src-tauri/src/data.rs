@@ -45,8 +45,7 @@ pub struct MatchEntry {
 }
 
 impl MatchEntry {
-    //TODO: CLJ: should we constrain this?  if they are wrong, who decides what is too high?
-    //      better to 0 the value if we get a negative, and leave other values alone.
+/*
     pub fn constrain_values(&mut self) -> MatchEntry {
         
         self.autoamp = self.autoamp.clamp(0, 5);
@@ -56,6 +55,7 @@ impl MatchEntry {
         self.teleoptrap = self.teleoptrap.clamp(0, 3);
         self.to_owned()
     }
+*/
 }
 
 fn from_scorepoints_string<'de, D>(
@@ -150,8 +150,8 @@ pub struct TeamSummary {
     pub total_speaker_avg: f64,
     pub speaker_amplified: f64,
     pub speaker_unamplified: f64,
-    pub total_amp: f64,
-    pub total_amp_avg: f64,
+    pub teleopamp: f64,
+    pub teleopamp_avg: f64,
     pub amp_amplified: f64,
     pub amp_unamplified: f64,
     pub auton_amp: f64,
@@ -170,8 +170,8 @@ struct  TeamSummaryAvgCounter {
     total_speaker_avg: Vec<u64>,
     speaker_amplified: Vec<u64>,
     speaker_unamplified: Vec<u64>,
-    total_amp: Vec<u64>,
-    total_amp_avg: Vec<u64>,
+    teleopamp: Vec<u64>,
+    teleopamp_avg: Vec<u64>,
     amp_amplified: Vec<u64>,
     amp_unamplified: Vec<u64>,
     auton_amp: Vec<u64>,
@@ -187,7 +187,7 @@ struct  TeamSummaryAvgCounter {
 impl TeamSummaryAvgCounter {
     pub fn new() -> TeamSummaryAvgCounter {
         TeamSummaryAvgCounter { total_speaker: Vec::new(), total_speaker_avg: Vec::new(), speaker_amplified: Vec::new(), speaker_unamplified: Vec::new(),  
-            total_amp: Vec::new(), total_amp_avg: Vec::new(), amp_amplified: Vec::new(), amp_unamplified: Vec::new(),
+            teleopamp: Vec::new(), teleopamp_avg: Vec::new(), amp_amplified: Vec::new(), amp_unamplified: Vec::new(),
             auton_amp: Vec::new(), auton_amp_avg: Vec::new(), auton_speaker: Vec::new(), auton_speaker_avg: Vec::new(), 
             points_trap: Vec::new(), climb_count: Vec::new(), climb_percentage: Vec::new(), amplifications: Vec::new()
         }
@@ -208,8 +208,8 @@ impl TeamSummary {
             avg_count.total_speaker_avg.push(match_entry.teleopspeaker);
             avg_count.speaker_amplified.push(match_entry.teleopspeaker);
             avg_count.speaker_unamplified.push(match_entry.teleopspeaker);
-            avg_count.total_amp.push(match_entry.teleopamp);
-            avg_count.total_amp_avg.push(match_entry.teleopamp);
+            avg_count.teleopamp.push(match_entry.teleopamp);
+            avg_count.teleopamp_avg.push(match_entry.teleopamp);
             avg_count.points_trap.push(match_entry.teleoptrap);
             avg_count.amplifications.push(match_entry.amplifications);
             if match_entry.climbtime > 0 { 
@@ -226,15 +226,15 @@ impl TeamSummary {
             total_speaker_avg: avg_count.total_speaker_avg.iter().copied().sum::<u64>() as f64 / avg_count.total_speaker_avg.len() as f64, 
             speaker_amplified: avg_count.speaker_amplified.iter().copied().sum::<u64>() as f64 / avg_count.speaker_amplified.len() as f64, 
             speaker_unamplified: avg_count.speaker_unamplified.iter().copied().sum::<u64>() as f64 / avg_count.speaker_unamplified.len() as f64, 
-            total_amp: avg_count.total_amp.iter().copied().sum::<u64>() as f64, 
-            total_amp_avg: avg_count.total_amp_avg.iter().copied().sum::<u64>() as f64 / avg_count.total_amp_avg.len() as f64, 
-            amp_amplified: avg_count.amp_amplified.iter().copied().sum::<u64>() as f64 / avg_count.total_amp.len() as f64,
-            amp_unamplified: avg_count.amp_unamplified.iter().copied().sum::<u64>() as f64 / avg_count.total_amp.len() as f64,
+            teleopamp: avg_count.teleopamp.iter().copied().sum::<u64>() as f64, 
+            teleopamp_avg: avg_count.teleopamp_avg.iter().copied().sum::<u64>() as f64 / avg_count.teleopamp_avg.len() as f64, 
+            amp_amplified: avg_count.amp_amplified.iter().copied().sum::<u64>() as f64 / avg_count.teleopamp.len() as f64,
+            amp_unamplified: avg_count.amp_unamplified.iter().copied().sum::<u64>() as f64 / avg_count.teleopamp.len() as f64,
             auton_amp: avg_count.auton_amp.iter().copied().sum::<u64>() as f64,
             auton_amp_avg: avg_count.auton_amp.iter().copied().sum::<u64>() as f64 / avg_count.auton_amp_avg.len() as f64,
             auton_speaker: avg_count.auton_speaker.iter().copied().sum::<u64>() as f64,
             auton_speaker_avg: avg_count.auton_speaker.iter().copied().sum::<u64>() as f64 / avg_count.auton_speaker_avg.len() as f64,
-            points_trap: avg_count.points_trap.iter().copied().sum::<u64>() as f64 / avg_count.points_trap.len() as f64,  
+            points_trap: avg_count.points_trap.iter().copied().sum::<u64>() as f64,  
             climb_count: avg_count.climb_count.iter().copied().sum::<u64>() as f64,
             climb_percentage: (avg_count.climb_count.iter().copied().sum::<u64>() as f64 / avg_count.climb_count.len() as f64),
             amplifications: (avg_count.amplifications.iter().copied().sum::<u64>() as f64)
@@ -249,8 +249,8 @@ impl TeamSummary {
             total_speaker_avg: (team1.total_speaker_avg + team2.total_speaker_avg),
             speaker_amplified: (team1.speaker_amplified + team2.speaker_amplified),
             speaker_unamplified: (team1.speaker_unamplified + team2.speaker_unamplified),
-            total_amp: (team1.total_amp + team2.total_amp),
-            total_amp_avg: (team1.total_amp_avg + team2.total_amp_avg),
+            teleopamp: (team1.teleopamp + team2.teleopamp),
+            teleopamp_avg: (team1.teleopamp_avg + team2.teleopamp_avg),
             amp_amplified: (team1.amp_amplified + team2.amp_amplified),
             amp_unamplified: (team1.amp_unamplified + team2.amp_unamplified),
             auton_amp: (team1.auton_amp + team2.auton_amp),
@@ -263,15 +263,17 @@ impl TeamSummary {
             amplifications: (team1.amplifications + team2.amplifications)
         }
     }
+/*    
     pub fn constrain_values(&mut self) -> Self {
         self.total_speaker = self.total_speaker.clamp(0.0, 9.0);
         self.speaker_amplified = self.speaker_amplified.clamp(0.0, 6.0);
         self.speaker_unamplified = self.speaker_unamplified.clamp(0.0, 6.0);
-        self.total_amp = self.total_amp.clamp(0.0, 9.0);
+        self.teleopamp = self.teleopamp.clamp(0.0, 9.0);
         self.points_trap = self.points_trap.clamp(0.0, 3.0);
         self.climb_count = self.climb_count.clamp(0.0, 1.0);
         self.to_owned()
     }
+*/
 }
 
 #[derive(Debug, Default, Clone, Serialize)]
@@ -353,11 +355,12 @@ impl TeamRanking
             }  // Stupid hack to make sure comparison team has a summary.
 
             //CLJ: why constrain only the comparison team?  why constrain at all?
-            let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap()).constrain_values();
+            //let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap()).constrain_values();
+            let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap());
            
             max_rank.autoamp = if (team_summary.auton_amp > max_rank.autoamp) {team_summary.auton_amp} else {max_rank.autoamp};
             max_rank.autospeaker = if (team_summary.auton_speaker > max_rank.autospeaker) {team_summary.auton_speaker} else {max_rank.autospeaker};
-            max_rank.teleopamp = if (team_summary.total_amp > max_rank.teleopamp) {team_summary.total_amp} else {max_rank.teleopamp};
+            max_rank.teleopamp = if (team_summary.teleopamp > max_rank.teleopamp) {team_summary.teleopamp} else {max_rank.teleopamp};
             max_rank.teleopspeaker = if (team_summary.total_speaker > max_rank.teleopspeaker) {team_summary.total_speaker} else {max_rank.teleopspeaker};
             max_rank.teleoptrap = if (team_summary.points_trap > max_rank.teleoptrap) {team_summary.points_trap} else {max_rank.teleoptrap};
             max_rank.climbcount = if (team_summary.climb_count > max_rank.climbcount) {team_summary.climb_count} else {max_rank.climbcount};
@@ -372,17 +375,20 @@ impl TeamRanking
             if comparison_team.teamNumber == team.teamNumber {
                 continue;
             }
-            let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap()).constrain_values();
+            //let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap()).constrain_values();
+            let team_summary = TeamSummary::combine_teams(team.get_summary().as_ref().unwrap(), comparison_team.get_summary().as_ref().unwrap());
             let mut ranking = TeamRanking::default();
             ranking.teamNumber = team.teamNumber;
             ranking.autoamp_rating = team_summary.auton_amp / max_rank.autoamp;
             ranking.autospeaker_rating = team_summary.auton_speaker / max_rank.autospeaker;
-            ranking.teleopamp_rating = team_summary.total_amp / max_rank.teleopamp;
+            ranking.teleopamp_rating = team_summary.teleopamp / max_rank.teleopamp;
             ranking.teleopspeaker_rating = team_summary.total_speaker / max_rank.teleopspeaker;
             ranking.teleoptrap_rating = team_summary.points_trap / max_rank.teleoptrap;
             ranking.climbcount_rating = team_summary.climb_count / max_rank.climbcount;
             ranking.amplification_rating = team_summary.amplifications / max_rank.amplifications;
             ranking.data_reliability_rating = 1.0;
+
+            //println!("teamNumber:{:?}  ampl:{} = totalAmps:{} / maxAmps:{} ",  ranking.teamNumber, ranking.amplification_rating, team_summary.amplifications, max_rank.amplifications);
             //ranking.overall_rating = (team_summary.avg_low*point_values.low + team_summary.avg_med*point_values.medium + team_summary.avg_high*point_values.high + team_summary.balance_percentage*point_values.balance + team_summary.dock_percentage*point_values.dock)/total_points_scored;
             ranking.overall_rating=1.0;
             rankings.push(ranking);
@@ -408,7 +414,8 @@ impl FrcTeam {
     }
 
     pub fn generate_summary(&mut self) {
-        self.summary = Some(TeamSummary::new(&self).constrain_values());
+        //self.summary = Some(TeamSummary::new(&self).constrain_values());
+        self.summary = Some(TeamSummary::new(&self));
     }
 
     pub fn get_summary(&self) -> &Option<TeamSummary> {
@@ -429,7 +436,8 @@ impl FrcTeam {
     }
 
     pub fn add_match_entry(&mut self, mut entry: MatchEntry) {
-        self.match_data.push(entry.constrain_values());
+        //self.match_data.push(entry.constrain_values());
+        self.match_data.push(entry);
     }
 }
 
