@@ -40,8 +40,6 @@ function round2Two(number) {
                   </tr>
                   <tr>
                     <td>${round2Two(team.summary.total_points_speaker)}</td>
-                    <td>${round2Two(team.summary.speaker_amplified)}</td>
-                    <td>${round2Two(team.summary.speaker_unamplified)}</td>
                   </tr>
                 </table>
                 <table class="cube-table">
@@ -52,9 +50,7 @@ function round2Two(number) {
                     <th>High</th>
                   </tr>
                   <tr>
-                  <td>${round2Two(team.summary.total_points_speaker)}</td>
-                  <td>${round2Two(team.summary.speaker_amplified)}</td>
-                  <td>${round2Two(team.summary.speaker_unamplified)}</td>
+                  <td>${round2Two(team.summary.total_points_speaker)}</td>               
                   </tr>
                 </table>
                 <table class="station-table">
