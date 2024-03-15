@@ -94,17 +94,26 @@ function populateOptions(data) {
     team_keys.forEach(teamNumber => {
         teamOptionsHtml += `<option value=${teamNumber}>${teamNumber}</option>`
     });
+    document.querySelector(".comparison-team-select").innerHTML = teamOptionsHtml;
+
     // Adds an event listener to the team select dropdown
     document.querySelector(".comparison-team-select").addEventListener("change", (event) => {
         let teamNumber = event.target.value;
         let team = data[teamNumber];
 
-        let ranking_order1 = document.querySelector(".ranking-order1-select").value;
-
-        populate_rankings(data, {"comparison_team": team, "rank_order1": ranking_order1})
-        //populate_rankings(data, {"comparison_team": team})
+        let sortorder = document.querySelector(".sortorder-select").value;
+        populate_rankings(data, {"comparison_team": team, "sort_order": sortorder})        
     });
-    document.querySelector(".comparison-team-select").innerHTML = teamOptionsHtml;
+    
+    // Adds an event listener to the team select dropdown
+    document.querySelector(".sortorder-select").addEventListener("change", (event) => {
+        let teamNumber = document.querySelector(".comparison-team-select").value;
+        let team = data[teamNumber];
+
+        let sortorder = event.target.value;
+        populate_rankings(data, {"comparison_team": team, "sort_order": sortorder})        
+    });
+    
 
     populate_rankings(data, {});
 

@@ -44,15 +44,49 @@ fn read_scout_data(data_path: &str) -> Result<HashMap<u64, FrcTeam>, Box<dyn Err
 }
 
 
+fn sort_teamRanking (mut data: Vec<TeamRanking>, sort_order: Option<String>) -> Vec<TeamRanking> 
+{
+  //default to sorting by amplification (since it is first in the select list)
+  data.sort_by(|a, b| b.amplification_rating.partial_cmp(&a.amplification_rating).unwrap_or(std::cmp::Ordering::Equal));
+
+  if let Some(order) = sort_order {
+
+    if (order == "autoamp") {
+      data.sort_by(|a, b| b.autoamp_rating.partial_cmp(&a.autoamp_rating).unwrap_or(std::cmp::Ordering::Equal));
+    }
+    else if (order == "autospeaker") {
+      data.sort_by(|a, b| b.autospeaker_rating.partial_cmp(&a.autospeaker_rating).unwrap_or(std::cmp::Ordering::Equal));
+    }
+    else if (order == "teleopamp") {
+      data.sort_by(|a, b| b.teleopamp_rating.partial_cmp(&a.teleopamp_rating).unwrap_or(std::cmp::Ordering::Equal));
+    }
+    else if (order == "teleopspeaker") {
+      data.sort_by(|a, b| b.teleopspeaker_rating.partial_cmp(&a.teleopspeaker_rating).unwrap_or(std::cmp::Ordering::Equal));
+    }
+    else if (order == "teleoptrap") {
+      data.sort_by(|a, b| b.teleoptrap_rating.partial_cmp(&a.teleoptrap_rating).unwrap_or(std::cmp::Ordering::Equal));
+    }
+    else if (order == "climbcount") {
+      data.sort_by(|a, b| b.climbcount_rating.partial_cmp(&a.climbcount_rating).unwrap_or(std::cmp::Ordering::Equal));
+    }    
+  }
+
+    return data;  
+}
+
 fn generate_rankings(team_data: HashMap<u64, FrcTeam>, options: RankOptions) -> Vec<TeamRanking> {
     TeamRanking::generate_rankings(team_data, options)
 }
 
-#[tauri::command]
+ #[tauri::command]
 fn get_team_rankings(handle: tauri::AppHandle, team_data: HashMap<u64, FrcTeam>, options: RankOptions) -> Vec<TeamRanking> {
-    let mut data: Vec<TeamRanking> = generate_rankings(team_data, options); 
-    data.sort_by(|a, b| b.amplification_rating.partial_cmp(&a.amplification_rating).unwrap_or(std::cmp::Ordering::Equal));
-    return data;
+
+    let sort_order: Option<String> = options.sort_order.clone();
+   
+    let data: Vec<TeamRanking> = generate_rankings(team_data, options);
+    let sorted_data: Vec<TeamRanking> = sort_teamRanking (data, sort_order);
+
+    return sorted_data;
 }
 
 #[tauri::command]
