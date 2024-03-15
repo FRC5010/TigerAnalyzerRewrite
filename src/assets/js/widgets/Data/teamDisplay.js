@@ -1,6 +1,10 @@
 // TODO: Add Search Feature
 // TODO: Team Comparison Feature
 // TODO: Dot menu for teams to access more info
+//
+//climb_count is a copy of the parameters balance_count.
+//The variable "climb" is a copy of the variable balance.
+//Edit the Docked, engaged, etc. variables
 
 function round2Two(number) {
     return +(Math.round(number + "e+2")  + "e-2");
@@ -28,42 +32,50 @@ function round2Two(number) {
         let teamEntry = document.createElement("div");
         teamEntry.classList.add("team-entry")
         // May be unwise to use innerHtml as it will execute any html put in the variables...but its probably fine...
+  
         teamEntry.innerHTML = `
                 <div class="label">${team.teamNumber}</div>
                 <div class="team-name">${(team.tba_data) ? team.tba_data.nickname:"Team"} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
                 <table class="cone-table">
-                  <caption></object></caption>
+                  <caption>Amplifications</caption>
                   <tr>
-                    <th>Low</th>
-                    <th>Medium</th>
-                    <th>High</th>
+                    <td>${round2Two(team.summary.amplifications)}</td>
                   </tr>
+
+                </table>
+                <table class="cone-table">
+                  <caption>Autonomous</caption>
                   <tr>
-                    <td>${round2Two(team.summary.total_points_speaker)}</td>
+                    <th>Total&nbsp;/&nbsp;Avg Amp</th>
+                    <th>Total&nbsp;/&nbsp;Avg Speaker</th>
+                  </tr>
+                  <tr> 
+                    <td>${round2Two(team.summary.autoamp)}&nbsp;/&nbsp;${round2Two(team.summary.autoamp_avg.toFixed(3))}</td> 
+                    <td>${round2Two(team.summary.autospeaker)}&nbsp;/&nbsp;${round2Two(team.summary.autospeaker_avg.toFixed(3))}</td>
                   </tr>
                 </table>
-                <table class="cube-table">
-                  <caption><object class="caption-icon" data="./assets/svg/cube.svg" type=""></object></caption>
+                <table class="cone-table"> 
+                  <caption>Teleop</caption>
                   <tr>
-                    <th>Low</th>
-                    <th>Medium</th>
-                    <th>High</th>
+                    <th>Total&nbsp;/&nbsp;Avg Amp</th>
+                    <th>Total&nbsp;/&nbsp;Avg Speaker</th>
                   </tr>
                   <tr>
-                  <td>${round2Two(team.summary.total_points_speaker)}</td>               
+                    <td>${round2Two(team.summary.teleopamp)} / ${round2Two(team.summary.teleopamp_avg.toFixed(3))}</td> 
+                    <td>${round2Two(team.summary.teleopspeaker)} / ${round2Two(team.summary.teleopspeaker_avg.toFixed(3))}</td> 
                   </tr>
                 </table>
                 <table class="station-table">
-                  <caption>Charge Station</caption>
+                  <caption>Endgame</caption>
                   <tr>
-                    <th>Can Climb</th>
-                    <th>Docked %</th>
-                    <th>Engaged %</th>
+                    <th>Points: Trap</th>
+                    <th>Climb Count</th>
+                    <th>Climb %</th>
                   </tr>
-                  <tr>
-                    <td>${team.summary.can_climb}</td>
-                    <td>${round2Two(team.summary.points_scored_trap)}</td>
-                    <td>${round2Two(team.summary.climb_percentage*100)}</td>
+                  <tr> 
+                    <td>${round2Two(team.summary.points_trap)}</td> <!-- points_trap --->
+                    <td>${round2Two(team.summary.climb_count)}</td>
+                    <td>${round2Two(team.summary.climb_percentage)}</td> <!--- climb_percentage*100 --->
                   </tr>
                 </table>
         `
@@ -81,4 +93,10 @@ function round2Two(number) {
   document.addEventListener("data_loaded", fillRawTeamData);
     
   
+  /*                  3rd Section of 1st part: <th>Points (Unamplified Speaker)</th>
+                      <td>${round2Two(team.summary.points_unamplified_speaker)}</td>
+                                          <th>Points: Amplified Speaker</th>
+                                          (Cone Image upload code) <caption>omous/Teleoperated<object class="caption-icon" data="./assets/svg/cone.svg" type=""></object></caption>
+                                          (Cube Image upload code) <caption><object class="caption-icon" data="./assets/svg/cube.svg" type=""></object></caption>
+                                          */
   
