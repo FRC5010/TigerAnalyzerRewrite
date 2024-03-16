@@ -53,7 +53,7 @@ where
     
     match s {
         "undefined" => Ok(0),
-        _ => Ok(u64::from_str(s).unwrap())
+        _ => Ok(u64::from_str(s).unwrap_or_default())
     }
 }
 
@@ -67,7 +67,7 @@ where
     
     match s {
         "undefined" => Ok(0),
-        _ => Ok(u64::from_str(s).unwrap())
+        _ => Ok(u64::from_str(s).unwrap_or_default())
     }
 }
 
@@ -316,7 +316,7 @@ impl TeamRanking
         if options.comparison_team.is_none() { 
             comparison_team = FrcTeam::default();
         } else {
-            comparison_team = options.comparison_team.unwrap();
+            comparison_team = options.comparison_team.unwrap_or_default();
         }
 
 //        // TODO: Make these better to configure
