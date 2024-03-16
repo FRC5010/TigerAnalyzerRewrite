@@ -30,8 +30,8 @@ function getValueStroke(value) {
                         </tr>
                         <tr>
                           <th>${round2Two(team.summary.amplifications)}</th>
-                          <td>${round2Two(team.summary.autoamp.toFixed(3))}</td>
-                          <td>${round2Two(team.summary.autospeaker.toFixed(3))}</td>
+                          <td>${round2Two(team.summary.autoamp_avg.toFixed(3))}</td>
+                          <td>${round2Two(team.summary.autospeaker_avg.toFixed(3))}</td>
                         </tr>
                       </table>
                     </div>
@@ -43,8 +43,8 @@ function getValueStroke(value) {
                           <th>Teleop Speaker</th>
                         </tr>
                         <tr>
-                          <td>${round2Two(team.summary.teleopamp.toFixed(3))}</td>
-                          <td>${round2Two(team.summary.teleopspeaker.toFixed(3))}</td>
+                          <td>${round2Two(team.summary.teleopamp_avg.toFixed(3))}</td>
+                          <td>${round2Two(team.summary.teleopspeaker_avg.toFixed(3))}</td>
                         </tr>
                       </table>
                     </div>
