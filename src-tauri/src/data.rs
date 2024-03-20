@@ -26,7 +26,25 @@ pub struct MatchEntry {
     #[serde(deserialize_with = "from_climbtime_string")]
     pub climbtime: u64,
     #[serde(deserialize_with = "from_scorepoints_string")]
-    pub amplifications: u64
+    pub amplifications: u64,
+    //Added "#[serde..." to amlifications to try and remove errors
+    //#[serde(deserialize_with = "from_scorepoints_string")]
+    pub autonote1: u64,
+    //#[serde(deserialize_with = "from_scorepoints_string")]
+    pub autonote2: u64,
+    //#[serde(deserialize_with = "from_scorepoints_string")]
+    pub autonote3: u64,
+    //#[serde(deserialize_with = "from_scorepoints_string")]
+    pub autonote4: u64,
+    //#[serde(deserialize_with = "from_scorepoints_string")]
+    pub autonote5: u64,
+    //#[serde(deserialize_with = "from_scorepoints_string")]
+    pub autonote6: u64,
+    //#[serde(deserialize_with = "from_scorepoints_string")]
+    pub autonote7: u64,
+    //#[serde(deserialize_with = "from_scorepoints_string")]
+    pub autonote8: u64,
+    //#[serde(deserialize_with = "from_scorepoints_string")]
 }
 
 impl MatchEntry {
@@ -160,6 +178,14 @@ pub struct TeamSummary {
     pub climb_count: f64,
     pub climb_percentage: f64,
     pub amplifications: f64,
+    pub autonote1: f64,
+    pub autonote2: f64,
+    pub autonote3: f64,
+    pub autonote4: f64,
+    pub autonote5: f64,
+    pub autonote6: f64,
+    pub autonote7: f64,
+    pub autonote8: f64, 
 }
 
 /* Team Summary Averages.  Populated based upon summarization of team MatchEntry items. **/
@@ -175,7 +201,15 @@ struct  TeamSummaryAvgCounter {
     points_trap: Vec<u64>,
     climb_count: Vec<u64>,
     climb_percentage: Vec<f64>,
-    amplifications: Vec<u64>
+    amplifications: Vec<u64>,
+    autonote1: Vec<u64>,
+    autonote2: Vec<u64>,
+    autonote3: Vec<u64>,
+    autonote4: Vec<u64>,
+    autonote5: Vec<u64>,
+    autonote6: Vec<u64>,
+    autonote7: Vec<u64>,
+    autonote8: Vec<u64>,
 }
 
 impl TeamSummaryAvgCounter {
@@ -183,7 +217,9 @@ impl TeamSummaryAvgCounter {
         TeamSummaryAvgCounter { teleopspeaker: Vec::new(), teleopspeaker_avg: Vec::new(), 
             teleopamp: Vec::new(), teleopamp_avg: Vec::new(), autoamp: Vec::new(), autoamp_avg: Vec::new(),
             autospeaker: Vec::new(), autospeaker_avg: Vec::new(), points_trap: Vec::new(), 
-            climb_count: Vec::new(), climb_percentage: Vec::new(), amplifications: Vec::new()
+            climb_count: Vec::new(), climb_percentage: Vec::new(), amplifications: Vec::new(), autonote1: Vec::new(),
+            autonote2: Vec::new(), autonote3: Vec::new(), autonote4: Vec::new(), autonote5: Vec::new(), autonote6: Vec::new(), 
+            autonote7: Vec::new(), autonote8: Vec::new(),
         }
     }
 }
@@ -204,6 +240,14 @@ impl TeamSummary {
             avg_count.teleopamp_avg.push(match_entry.teleopamp);
             avg_count.points_trap.push(match_entry.teleoptrap);
             avg_count.amplifications.push(match_entry.amplifications);
+            avg_count.autonote1.push(match_entry.autonote1);
+            avg_count.autonote2.push(match_entry.autonote2);
+            avg_count.autonote3.push(match_entry.autonote3);
+            avg_count.autonote4.push(match_entry.autonote4);
+            avg_count.autonote5.push(match_entry.autonote5);
+            avg_count.autonote6.push(match_entry.autonote6);
+            avg_count.autonote7.push(match_entry.autonote7);
+            avg_count.autonote8.push(match_entry.autonote8);
             if match_entry.climbtime > 0 { 
                 avg_count.climb_count.push(1);
             } else {
@@ -215,17 +259,25 @@ impl TeamSummary {
         TeamSummary { 
             teamNumber: team.teamNumber, 
             teleopspeaker: avg_count.teleopspeaker.iter().copied().sum::<u64>() as f64, 
-            teleopspeaker_avg: avg_count.teleopspeaker_avg.iter().copied().sum::<u64>() as f64 / 4 as f64,//avg_count.teleopspeaker_avg.len() as f64, 
+            teleopspeaker_avg: avg_count.teleopspeaker_avg.iter().copied().sum::<u64>() as f64 / avg_count.teleopspeaker_avg.len() as f64, 
             teleopamp: avg_count.teleopamp.iter().copied().sum::<u64>() as f64, 
-            teleopamp_avg: avg_count.teleopamp_avg.iter().copied().sum::<u64>() as f64 / 4 as f64, //avg_count.teleopamp_avg.len() as f64, 
+            teleopamp_avg: avg_count.teleopamp_avg.iter().copied().sum::<u64>() as f64 / avg_count.teleopamp_avg.len() as f64, 
             autoamp: avg_count.autoamp.iter().copied().sum::<u64>() as f64,
             autoamp_avg: avg_count.autoamp.iter().copied().sum::<u64>() as f64 / avg_count.autoamp_avg.len() as f64,
             autospeaker: avg_count.autospeaker.iter().copied().sum::<u64>() as f64,
-            autospeaker_avg: avg_count.autospeaker.iter().copied().sum::<u64>() as f64 / 4 as f64, //(avg_count.autospeaker.len()-8) as f64,
+            autospeaker_avg: avg_count.autospeaker.iter().copied().sum::<u64>() as f64 / (avg_count.autospeaker.len()-8) as f64,
             points_trap: avg_count.points_trap.iter().copied().sum::<u64>() as f64,  
             climb_count: avg_count.climb_count.iter().copied().sum::<u64>() as f64,
             climb_percentage: (avg_count.climb_count.iter().copied().sum::<u64>() as f64 / avg_count.climb_count.len() as f64),
-            amplifications: (avg_count.amplifications.iter().copied().sum::<u64>() as f64)
+            amplifications: (avg_count.amplifications.iter().copied().sum::<u64>() as f64),
+            autonote1: avg_count.autonote1.iter().copied().sum::<u64>() as f64,
+            autonote2: avg_count.autonote2.iter().copied().sum::<u64>() as f64,
+            autonote3: avg_count.autonote3.iter().copied().sum::<u64>() as f64,
+            autonote4: avg_count.autonote4.iter().copied().sum::<u64>() as f64,
+            autonote5: avg_count.autonote5.iter().copied().sum::<u64>() as f64,
+            autonote6: avg_count.autonote6.iter().copied().sum::<u64>() as f64,
+            autonote7: avg_count.autonote7.iter().copied().sum::<u64>() as f64,
+            autonote8: avg_count.autonote8.iter().copied().sum::<u64>() as f64,
         }
     }
 
@@ -244,7 +296,15 @@ impl TeamSummary {
             points_trap: (team1.points_trap + team2.points_trap),
             climb_count: team1.climb_count + team2.climb_count,
             climb_percentage: f64::max(team1.climb_percentage, team2.climb_percentage),            
-            amplifications: (team1.amplifications + team2.amplifications)
+            amplifications: (team1.amplifications + team2.amplifications),
+            autonote1: (team1.autonote1 + team2.autonote1),
+            autonote2: (team1.autonote2 + team2.autonote2),
+            autonote3: (team1.autonote3 + team2.autonote3),
+            autonote4: (team1.autonote4 + team2.autonote4),
+            autonote5: (team1.autonote5 + team2.autonote5),
+            autonote6: (team1.autonote6 + team2.autonote6),
+            autonote7: (team1.autonote7 + team2.autonote7),
+            autonote8: (team1.autonote8 + team2.autonote8),
         }
     }
 /*    
@@ -268,7 +328,15 @@ pub struct RankMaxCount {
     pub teleopspeaker: f64,
     pub teleoptrap: f64,
     pub climbcount: f64,
-    pub amplifications: f64
+    pub amplifications: f64,
+    pub autonote1: f64,
+    pub autonote2: f64,
+    pub autonote3: f64,
+    pub autonote4: f64,
+    pub autonote5: f64,
+    pub autonote6: f64,
+    pub autonote7: f64,
+    pub autonote8: f64,
 }
 
 //pub struct PointValues {
@@ -296,7 +364,15 @@ pub struct TeamRanking {
     pub teleoptrap_rating: f64,
     pub climbcount_rating: f64,
     pub amplification_rating: f64,
-    pub data_reliability_rating: f64
+    pub data_reliability_rating: f64,
+    pub autonote1_rating: f64,
+    pub autonote2_rating: f64,
+    pub autonote3_rating: f64,
+    pub autonote4_rating: f64,
+    pub autonote5_rating: f64,
+    pub autonote6_rating: f64,
+    pub autonote7_rating: f64,
+    pub autonote8_rating: f64,
 }
 
 
@@ -347,6 +423,14 @@ impl TeamRanking
             max_rank.teleoptrap = if (team_summary.points_trap > max_rank.teleoptrap) {team_summary.points_trap} else {max_rank.teleoptrap};
             max_rank.climbcount = if (team_summary.climb_count > max_rank.climbcount) {team_summary.climb_count} else {max_rank.climbcount};
             max_rank.amplifications = if (team_summary.amplifications > max_rank.amplifications) {team_summary.amplifications} else {max_rank.amplifications};
+            max_rank.autonote1 = if (team_summary.autonote1 > max_rank.autonote1) {team_summary.autonote1} else {max_rank.autonote1};
+            max_rank.autonote2 = if (team_summary.autonote2 > max_rank.autonote2) {team_summary.autonote2} else {max_rank.autonote2};
+            max_rank.autonote3 = if (team_summary.autonote3 > max_rank.autonote3) {team_summary.autonote3} else {max_rank.autonote3};
+            max_rank.autonote4 = if (team_summary.autonote4 > max_rank.autonote4) {team_summary.autonote4} else {max_rank.autonote4};
+            max_rank.autonote5 = if (team_summary.autonote5 > max_rank.autonote5) {team_summary.autonote5} else {max_rank.autonote5};
+            max_rank.autonote6 = if (team_summary.autonote6 > max_rank.autonote6) {team_summary.autonote6} else {max_rank.autonote6};
+            max_rank.autonote7 = if (team_summary.autonote7 > max_rank.autonote7) {team_summary.autonote7} else {max_rank.autonote7};
+            max_rank.autonote8 = if (team_summary.autonote8 > max_rank.autonote8) {team_summary.autonote8} else {max_rank.autonote8};
             
         };
 
@@ -369,6 +453,14 @@ impl TeamRanking
             ranking.climbcount_rating = team_summary.climb_count / max_rank.climbcount;
             ranking.amplification_rating = team_summary.amplifications / max_rank.amplifications;
             ranking.data_reliability_rating = 1.0;
+            ranking.autonote1_rating = team_summary.autonote1 / max_rank.autonote1;
+            ranking.autonote2_rating = team_summary.autonote2 / max_rank.autonote2;
+            ranking.autonote3_rating = team_summary.autonote3 / max_rank.autonote3;
+            ranking.autonote4_rating = team_summary.autonote4 / max_rank.autonote4;
+            ranking.autonote5_rating = team_summary.autonote5 / max_rank.autonote5;
+            ranking.autonote6_rating = team_summary.autonote6 / max_rank.autonote6;
+            ranking.autonote7_rating = team_summary.autonote7 / max_rank.autonote7;
+            ranking.autonote8_rating = team_summary.autonote8 / max_rank.autonote8;
 
             //println!("teamNumber:{:?}  ampl:{} = totalAmps:{} / maxAmps:{} ",  ranking.teamNumber, ranking.amplification_rating, team_summary.amplifications, max_rank.amplifications);
             //ranking.overall_rating = (team_summary.avg_low*point_values.low + team_summary.avg_med*point_values.medium + team_summary.avg_high*point_values.high + team_summary.balance_percentage*point_values.balance + team_summary.dock_percentage*point_values.dock)/total_points_scored;

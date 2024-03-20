@@ -37,6 +37,18 @@ function round2Two(number) {
                 <div class="label">${team.teamNumber}</div>
                 <div class="team-name">${(team.tba_data) ? team.tba_data.nickname:"Team"} (${team.match_data.length} ${(team.match_data.length == 1) ? "Entry":"Entries" })</div>
                 <table class="cone-table">
+                <caption>Auto Note Pickup Location</caption>
+                <tr>
+                  <td>${round2Two(team.summary.autonote1)}</td>
+                  <td>${round2Two(team.summary.autonote2)}</td>
+                  <td>${round2Two(team.summary.autonote3)}</td>
+                  <td>${round2Two(team.summary.autonote4)}</td>
+                  <td>${round2Two(team.summary.autonote5)}</td>
+                  <td>${round2Two(team.summary.autonote6)}</td>
+                  <td>${round2Two(team.summary.autonote7)}</td>
+                  <td>${round2Two(team.summary.autonote8)}</td>
+                </tr>
+                <table class="cone-table">
                   <caption>Amplifications</caption>
                   <tr>
                     <td>${round2Two(team.summary.amplifications)}</td>
